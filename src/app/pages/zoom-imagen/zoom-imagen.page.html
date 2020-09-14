@@ -1,0 +1,13 @@
+<ion-header [translucent]="true" no-border>
+    <ion-toolbar color="barra">
+
+        <ion-title>{{ producto }}</ion-title>
+        <ion-button color="barra" slot=end (click)="salir()">
+            <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content color="empresa">
+    <img [src]="img | url" class="w100" />
+</ion-content>

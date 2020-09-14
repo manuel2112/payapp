@@ -1,0 +1,25 @@
+<ion-header [translucent]="true" no-border>
+    <ion-toolbar color="dark">
+
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/"></ion-back-button>
+        </ion-buttons>
+        <ion-title>HORARIO</ion-title>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding color="dark">
+
+    <ion-grid>
+        <ion-row *ngFor="let horario of horarios">
+            <ion-col>
+                {{ horario.HORARIO_DIA_OPEN | dia }}
+            </ion-col>
+            <ion-col>
+                {{ horario.HORARIO_HORA_OPEN | slice:0:5 }} - {{ horario.HORARIO_HORA_CLOSE | slice:0:5 }}
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+</ion-content>

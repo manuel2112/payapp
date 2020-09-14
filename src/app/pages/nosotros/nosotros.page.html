@@ -1,0 +1,43 @@
+<ion-header [translucent]="true" no-border>
+    <ion-toolbar color="dark">
+
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/"></ion-back-button>
+        </ion-buttons>
+        <ion-title>NOSOTROS</ion-title>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="cargando" padding color="dark">
+
+    <h1 class="ion-text-center">{{ empresa.EMPRESA_NOMBRE }}</h1>
+    <p class="txt-contenido">{{ empresa.EMPRESA_DESCRIPCION }}</p>
+
+    <div class="btns-center">
+        <ion-button color="primary" *ngIf="empresa.EMPRESA_FACEBOOK " (click)="btnURL(empresa.EMPRESA_FACEBOOK)">
+            <ion-icon name="logo-facebook"></ion-icon>
+        </ion-button>
+
+        <ion-button color="instagram" *ngIf="empresa.EMPRESA_INSTAGRAM" (empresa.EMPRESA_INSTAGRAM)="btnURL(empresa.EMPRESA_INSTAGRAM)">
+            <ion-icon name="logo-instagram"></ion-icon>
+        </ion-button>
+
+        <ion-button color="web" *ngIf="empresa.EMPRESA_WEB" (click)="btnURL(empresa.EMPRESA_WEB)">
+            <ion-icon name="globe-outline"></ion-icon>
+        </ion-button>
+
+        <ion-button color="whatsapp" *ngIf="empresa.EMPRESA_FONO" (click)="msnWhatsAPP(empresa.EMPRESA_FONO)">
+            <ion-icon name="logo-whatsapp"></ion-icon>
+        </ion-button>
+
+        <ion-button color="phone" *ngIf="empresa.EMPRESA_FONO" (click)="callPhone(empresa.EMPRESA_FONO)">
+            <ion-icon name="call"></ion-icon>
+        </ion-button>
+
+        <ion-button color="primary" *ngIf="empresa.EMPRESA_DIRECCION" (click)="abrirMapa()">
+            <ion-icon name="locate-outline"></ion-icon>
+        </ion-button>
+    </div>
+
+</ion-content>

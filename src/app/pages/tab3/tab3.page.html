@@ -1,0 +1,81 @@
+<ion-header [translucent]="true" no-border>
+    <ion-toolbar color="barra">
+
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+
+        <ion-title>CARRITO</ion-title>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="cargando" color="empresa">
+
+    <div *ngIf="productos.length == 0">
+        <ion-button color="warning" class="canasta-vacia" expand="block" (click)="irMenu()">
+            TIENES TU CANASTE VACIA <br> REVISA NUESTROS PRODUCTOS AQUÍ
+        </ion-button>
+    </div>
+
+    <div *ngIf="productos.length > 0">
+        <ion-grid *ngFor="let producto of productos; let i=index">
+            <ion-row>
+                <ion-col>
+                    {{ producto.nmbPro }} - {{ producto.varPro.PROVAR_DESC }}
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="4">
+                    {{ producto.varPro.PROVAR_VALOR * producto.cantidad | peso }}
+                </ion-col>
+                <ion-col size="4" class="operador">
+                    <ion-icon name="remove-outline" *ngIf="producto.cantidad > 1" (click)="restar(producto.nmbPro , producto.varPro, producto.cantidad)"></ion-icon>
+                    <ion-icon name="remove-outline" *ngIf="producto.cantidad <= 1"></ion-icon>
+                    {{ producto.cantidad }}
+                    <ion-icon name="add-outline" (click)="sumar(producto.nmbPro , producto.varPro, producto.cantidad)"></ion-icon>
+                </ion-col>
+                <ion-col size="4" class="ion-text-center">
+                    <ion-icon name="trash-outline" (click)="eliminarVarPro(producto.varPro.PROVAR_ID)"></ion-icon>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+        <ion-item color="barra" class="total">
+            <ion-label>
+                Total:
+            </ion-label>
+            <span slot="end">
+                {{ totalProductos | peso }}
+            </span>
+        </ion-item>
+
+        <ion-grid color="barra" class="total">
+            <ion-row color="barra">
+                <ion-col size="6" color="barra">
+                    Observaciones
+                </ion-col>
+                <ion-col size="6">
+                    <ion-segment mode="ios">
+                        <ion-segment-button (click)="clcObs(1)">
+                            <ion-label>SI</ion-label>
+                        </ion-segment-button>
+                        <ion-segment-button (click)="clcObs(0)">
+                            <ion-label>NO</ion-label>
+                        </ion-segment-button>
+                    </ion-segment>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+        <ion-row>
+            <ion-col size="12">
+                <ion-button color="success" expand="block" (click)="abrirShop()">PAGAR</ion-button>
+            </ion-col>
+        </ion-row>
+    </div>
+
+
+
+
+</ion-content>

@@ -1,0 +1,33 @@
+.operador {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    align-content: stretch;
+}
+
+ion-grid {
+    border-bottom: 1px solid var(--ion-color-barra);
+    font-size: 15px;
+}
+
+.canasta-vacia {
+    font-size: 15px;
+    margin-top: 200px;
+    height: 150px;
+}
+
+.total {
+    margin: 50px 0;
+}
+
+ion-segment-button {
+    --padding-start: 0px;
+    --padding-end: 0px;
+    --margin-end: 0px;
+    --margin-start: 0px;
+    --color-checked: #000;
+    --color: white;
+    --background-checked: white;
+}

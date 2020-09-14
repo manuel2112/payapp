@@ -6,17 +6,40 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
+import {HttpClientModule } from '@angular/common/http'
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { CallNumber } from '@ionic-native/call-number/ngx';
+import { GoogleMaps } from '@ionic-native/google-maps';
+import { PipesModule } from './pipes/pipes.module';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
+import { AgmCoreModule } from '@agm/core';            // @agm/core
+import { AgmDirectionModule } from 'agm-direction';   // agm-direction
+
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule,
+    AgmCoreModule.forRoot({// @agm/core
+      apiKey: 'AIzaSyC8TvTPxyi1Zh41iFENKegRp-SqlWfUmmc',
+    }),
+    AgmDirectionModule,
+     IonicModule.forRoot(),
+     AppRoutingModule,
+     PipesModule,
+     HttpClientModule],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    InAppBrowser,
+    CallNumber,
+    GoogleMaps,
+    NativeStorage
   ],
   bootstrap: [AppComponent]
 })

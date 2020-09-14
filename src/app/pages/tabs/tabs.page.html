@@ -1,0 +1,21 @@
+<ion-tabs>
+
+    <ion-tab-bar slot="bottom" color="barra">
+        <ion-tab-button tab="tab1">
+            <ion-icon name="home-outline"></ion-icon>
+            <ion-label>PORTADA</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="tab2">
+            <ion-icon name="menu-outline"></ion-icon>
+            <ion-label>MENU</ion-label>
+        </ion-tab-button>
+
+        <ion-tab-button tab="tab3">
+            <ion-icon name="cart-outline"></ion-icon>
+            <ion-badge *ngIf="counterShop() > 0">{{ counterShop() }}</ion-badge>
+            <ion-label>CARRITO</ion-label>
+        </ion-tab-button>
+    </ion-tab-bar>
+
+</ion-tabs>

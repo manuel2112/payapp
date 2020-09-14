@@ -1,0 +1,94 @@
+<ion-header [translucent]="true" no-border>
+    <ion-toolbar color="barra">
+        <ion-title slot="start">
+            {{ empresa.EMPRESA_NOMBRE }}
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" *ngIf="cargando" color="empresa">
+
+    <div class="center">
+        <ion-img [src]="empresa.EMPRESA_LOGOTIPO | url"></ion-img>
+    </div>
+
+    <ion-button color="success" expand="block" *ngIf="ABIERTO != 0" routerLink="/horario">ABIERTO HASTA LAS {{ horaCierre | slice:0:5 }} hrs.</ion-button>
+    <ion-button color="danger" expand="block" *ngIf="ABIERTO == 0" routerLink="/horario">CERRADO {{ timeBack }} para abrir.</ion-button>
+
+    <h1 center>OFERTAS</h1>
+
+    <ion-slides pager="true">
+
+        <ion-slide *ngFor="let oferta of ofertas">
+
+            <ion-card (click)="detalle(oferta.oferta.PRODUCTO_ID);">
+                <div class="foto-card">
+                    <img *ngIf="oferta.oferta.PRODUCTO_IMG == null" [src]="empresa.EMPRESA_LOGOTIPO | url" class="w100" />
+                    <img *ngIf="oferta.oferta.PRODUCTO_IMG != null" [src]="oferta.oferta.PRODUCTO_IMG | url" class="w100" />
+                </div>
+                <ion-card-content>
+                    <ion-card-title>
+                        {{ oferta.oferta.PRODUCTO_NOMBRE}}
+                    </ion-card-title>
+                    <p>
+                        {{ oferta.oferta.PRODUCTO_DESC | truncar }}
+                    </p>
+                    <ion-button expand="full">{{ oferta.valor | peso }}</ion-button>
+                </ion-card-content>
+            </ion-card>
+
+        </ion-slide>
+
+    </ion-slides>
+
+    <h1>DESTACADOS</h1>
+
+    <ion-slides pager="true">
+
+        <ion-slide *ngFor="let dest of destacados">
+
+            <ion-card (click)="detalle(dest.destacado.PRODUCTO_ID);">
+                <img *ngIf="dest.destacado.PRODUCTO_IMG == null" [src]="empresa.EMPRESA_LOGOTIPO | url" class="w100" />
+                <img *ngIf="dest.destacado.PRODUCTO_IMG != null" [src]="dest.destacado.PRODUCTO_IMG | url" class="w100" />
+                <ion-card-content>
+                    <ion-card-title>
+                        DESC: {{ dest.destacado.PRODUCTO_NOMBRE }}
+                    </ion-card-title>
+                    <p>
+                        {{ dest.destacado.PRODUCTO_DESC }}
+                    </p>
+                    <ion-button expand="full">{{ dest.valor | peso }}</ion-button>
+                </ion-card-content>
+            </ion-card>
+
+        </ion-slide>
+    </ion-slides>
+
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+        <ion-fab-button>
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="top">
+            <ion-fab-button color="primary" *ngIf="empresa.EMPRESA_FACEBOOK" (click)="btnURL(empresa.EMPRESA_FACEBOOK)">
+                <ion-icon name="logo-facebook"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color="instagram" *ngIf="empresa.EMPRESA_INSTAGRAM" (click)="btnURL(empresa.EMPRESA_INSTAGRAM)">
+                <ion-icon name="logo-instagram"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color="web" *ngIf="empresa.EMPRESA_WEB" (click)="btnURL(empresa.EMPRESA_WEB)">
+                <ion-icon name="globe-outline"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color="whatsapp" *ngIf="empresa.EMPRESA_FONO" (click)="msnWhatsAPP(empresa.EMPRESA_FONO)">
+                <ion-icon name="logo-whatsapp"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color="phone" *ngIf="empresa.EMPRESA_FONO" (click)="callPhone(empresa.EMPRESA_FONO)">
+                <ion-icon name="call"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
+        <ion-fab-list side="start">
+            <ion-fab-button color="primary" routerLink="/nosotros">
+                <ion-icon name="information-outline"></ion-icon>
+            </ion-fab-button>
+        </ion-fab-list>
+    </ion-fab>
+</ion-content>
