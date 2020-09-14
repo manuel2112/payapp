@@ -10,14 +10,15 @@ import {HttpClientModule } from '@angular/common/http'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { PipesModule } from './pipes/pipes.module';
 
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { GoogleMaps } from '@ionic-native/google-maps';
-import { PipesModule } from './pipes/pipes.module';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { AgmCoreModule } from '@agm/core';            // @agm/core
 import { AgmDirectionModule } from 'agm-direction';   // agm-direction
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { AgmDirectionModule } from 'agm-direction';   // agm-direction
     InAppBrowser,
     CallNumber,
     GoogleMaps,
-    NativeStorage
+    NativeStorage,
+    Geolocation
   ],
   bootstrap: [AppComponent]
 })

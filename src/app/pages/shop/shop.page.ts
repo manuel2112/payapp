@@ -5,6 +5,8 @@ import { PesoPipe } from '../../pipes/peso.pipe';
 
 import { LoadingService } from '../../services/loading.service';
 import { ToastService } from '../../services/toast.service';
+import { StoragePersonaService } from '../../services/storage-persona.service';
+import { GeolocationService } from '../../services/geolocation.service';
 
 @Component({
   selector: 'app-shop',
@@ -16,20 +18,26 @@ export class ShopPage implements OnInit {
   @Input() subTotal:number;
   @Input() obs:string;
   cargando:boolean = false;
-  daPropina:boolean = false;
+  //daPropina:boolean = false;
   propina:number = 0;
   total:number = 0;
-  txtSugerido:string = "10% sugerido";
   boolConfirma:boolean = false;
+  boolPropina:boolean = false;
+  boolPersona:boolean = false;
+  boolConfirmarArea:boolean = false;
+  latitude:number = null;
+  longitude:number = null;
+  persona:string = '';
 
   constructor( private modalCtrl:ModalController,
                private loadingService:LoadingService,
                private alertController: AlertController,
-               private toastService: ToastService) { }
+               private toastService: ToastService,
+               private storagePersonaService:StoragePersonaService,
+               private geolocationService:GeolocationService) { }
 
   ngOnInit() {
     this.total = this.subTotal;
-    console.log(this.obs);
   }
 
   ionViewWillEnter(){
@@ -50,10 +58,12 @@ export class ShopPage implements OnInit {
     if( option === 1 ){
       this.propina = 0;
       this.total = this.subTotal;
+      this.boolPropina = true;
       this.alertConsultaPropina();
     }else if( option === 0 ){
       this.propina = 0;
-      this.daPropina = true;
+      //this.daPropina = true;
+      this.boolPropina = true;
       this.totalPagar(this.propina);
     }
   }
@@ -132,54 +142,115 @@ export class ShopPage implements OnInit {
     await alert.present();
   }
 
+  datosStoragePersona(st:string){
+
+    let atributo;
+    let valor = this.storagePersonaService.getStorage();
+    this.persona = valor;
+    switch(st) { 
+      case 'nombre': { 
+        atributo = valor[0].nombre;
+        break; 
+      } 
+      case 'fono': { 
+        atributo = valor[0].fono;
+        break; 
+      } 
+      case 'email': { 
+        atributo = valor[0].email;
+        break; 
+      } 
+      case 'direccion': { 
+        atributo = valor[0].direccion;
+        break; 
+      } 
+      case 'ciudad': { 
+        atributo = valor[0].ciudad;
+        break; 
+      }
+   }
+   
+    return atributo;
+  }
+
   async datosAlertPrompt() {
+    let existe = this.storagePersonaService.existePersona();
     const alert = await this.alertController.create({
       header: 'INGRESA TUS DATOS',
       inputs: [
         {
           name: 'nmbDato',
           type: 'text',
-          label: 'NOMBRE',
+          value: existe ? this.datosStoragePersona('nombre') : '',
           placeholder: 'NOMBRE'
         },
         {
           name: 'fonoDato',
           type: 'text',
-          label: 'NOMBRE',
-          placeholder: 'N° CELULAR'
+          value: existe ? this.datosStoragePersona('fono') : '',
+          placeholder: 'N° CELULAR EJ. +56912345678'
         },
         {
           name: 'emailDato',
           type: 'email',
+          value: existe ? this.datosStoragePersona('email') : '',
           placeholder: 'EMAIL'
         },
         {
           name: 'direccionDato',
           type: 'text',
+          value: existe ? this.datosStoragePersona('direccion') : '',
           placeholder: 'DIRECCIÓN'
         },
         {
           name: 'ciudadDato',
           type: 'text',
-          placeholder: 'CIUDAD'
+          value: existe ? this.datosStoragePersona('ciudad') : '',
+          placeholder: 'CIUDAD/SECTOR'
         }
       ],
       buttons: [
         {
-          text: 'Cancel',
+          text: 'CANCELAR',
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
-            console.log('Confirm Cancel');
+            this.boolConfirma = false;
+            this.boolPersona = false;
           }
         }, {
-          text: 'Ok',
+          text: 'CONFIRMAR',
           handler: (data) => {
-            if( data.fonoDato == '' || data.emailDato == '' || data.direccionDato == '' || data.direccionDato == ''){
-              this.toastService.presentToast('TODOS LOS DATOS OBLIGATORIOS');
-              this.boolConfirma = true;
-              //return false
+            
+            if( data.nmbDato == '' ){
+              this.toastService.presentToast('NOMBRE OBLIGATORIO');
+              return false;
+            }
+            if( data.fonoDato == '' ){
+              this.toastService.presentToast('N° CELULAR OBLIGATORIO');
+              return false;
+            }
+            if( data.emailDato == '' ){
+              this.toastService.presentToast('EMAIL OBLIGATORIO');
+              return false;
+            }
+            if( data.direccionDato == '' ){
+              this.toastService.presentToast('DIRECCIÓN OBLIGATORIO');
+              return false;
+            }
+            if( data.ciudadDato == '' ){
+              this.toastService.presentToast('CIUDAD/SECTOR OBLIGATORIO');
+              return false;
+            }
+            if( data.nmbDato == '' || data.fonoDato == '' || data.emailDato == '' || data.direccionDato == '' || data.ciudadDato == ''){
+              this.boolConfirma = false;
+              this.boolPersona = false;
+              return false;
             }else{
+              this.storagePersonaService.insertStorage(data.nmbDato, data.fonoDato, data.emailDato, data.direccionDato, data.ciudadDato);
+              this.boolConfirma = true;
+              this.boolPersona = true;
+              return true;
             }
           }
         }
@@ -187,6 +258,41 @@ export class ShopPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+  confirmarArea(ev:any){
+    this.boolConfirmarArea = ev.detail.checked;
+  }
+
+  confirmarGPS(ev:any){
+    if(ev.detail.checked){
+      this.latitude = this.geolocationService.latitude;
+      this.longitude = this.geolocationService.longitude;
+    }else{
+      this.latitude = null;
+      this.longitude = null;
+    }
+  }
+
+  pagar(){
+    if(!this.boolPropina){
+      this.toastService.presentToast('CONFIRMAR PROPINA');
+      return;
+    }
+    if(!this.boolPersona){
+      this.toastService.presentToast('CONFIRMAR TUS DATOS');
+      return;
+    }
+    if(!this.boolConfirmarArea){
+      this.toastService.presentToast('CONFIRMAR QUE VIVES DENTRO DEL AREA DE REPARTO');
+      return;
+    }
+
+    if(this.boolPropina && this.boolPersona && this.boolConfirmarArea){
+      console.log('pago ok');
+      console.log(this.latitude);
+      console.log(this.longitude);
+    }
   }
 
   salir(){

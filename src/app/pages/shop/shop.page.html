@@ -62,24 +62,24 @@
 
     <ion-row>
         <ion-col size="12">
-            <ion-button color="warning" expand="block" (click)="datosAlertPrompt()">DATOS DE ENTREGA</ion-button>
+            <ion-button color="warning" expand="block" (click)="datosAlertPrompt()">INGRESA TUS DATOS AQUÍ</ion-button>
         </ion-col>
     </ion-row>
 
     <ion-list *ngIf="boolConfirma">
         <ion-item color="barra">
             <ion-label>Confirmo que vivo dentro de las áreas<br> de reparto</ion-label>
-            <ion-checkbox slot="end"></ion-checkbox>
+            <ion-checkbox slot="end" (ionChange)="confirmarArea($event)"></ion-checkbox>
         </ion-item>
         <ion-item color="barra">
             <ion-label>Adjunto posición por GPS</ion-label>
-            <ion-checkbox slot="end"></ion-checkbox>
+            <ion-checkbox slot="end" (ionChange)="confirmarGPS($event)"></ion-checkbox>
         </ion-item>
     </ion-list>
 
     <ion-row>
         <ion-col size="12">
-            <ion-button color="success" expand="block">REALIZAR PAGO</ion-button>
+            <ion-button color="success" expand="block" (click)="pagar()">REALIZAR PAGO</ion-button>
         </ion-col>
     </ion-row>
 

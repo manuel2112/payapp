@@ -1,11 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { ModalController, ToastController } from '@ionic/angular';
+import { ModalController } from '@ionic/angular';
 
 import { LoadingService } from '../../services/loading.service';
-
-import { AgmCoreModule } from '@agm/core';            // @agm/core
-import { AgmDirectionModule } from 'agm-direction';   // agm-direction
-import { AgmMap, AgmMarker } from '@agm/core';
 
 @Component({
   selector: 'app-map',
@@ -21,17 +17,11 @@ export class MapPage implements OnInit {
   zoom = 17;
   cargando:boolean = false;
    
-  public origin: any;
-  public destination: any;
-
-  @ViewChild ('map', {read:ElementRef, static:false}) mapRef:ElementRef;
-  @ViewChild('myDiv') myDivElementRef: ElementRef;
+  origin: any;
+  destination: any;
 
   constructor( private modalCtrl:ModalController,
-               private loadingService:LoadingService,
-               public toastCtrl:ToastController ) { 
-            
-  }
+               private loadingService:LoadingService) {}
 
   ionViewWillEnter(){
     this.loadingService.loadingPresent();
