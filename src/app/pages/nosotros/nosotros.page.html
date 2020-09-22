@@ -14,6 +14,9 @@
     <h1 class="ion-text-center">{{ empresa.EMPRESA_NOMBRE }}</h1>
     <p class="txt-contenido">{{ empresa.EMPRESA_DESCRIPCION }}</p>
 
+    <h2 class="ion-text-center">SERVICIOS</h2>
+    <p class="txt-contenido" *ngFor="let negocio of tipoNegocio"><strong>{{ negocio.TIPO_NEGOCIO_NOMBRE }}</strong>: {{ negocio.EMPRESA_TIPO_NEGOCIO_OBS }}</p>
+
     <div class="btns-center">
         <ion-button color="primary" *ngIf="empresa.EMPRESA_FACEBOOK " (click)="btnURL(empresa.EMPRESA_FACEBOOK)">
             <ion-icon name="logo-facebook"></ion-icon>

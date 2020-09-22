@@ -50,18 +50,50 @@
             </span>
         </ion-item>
 
-        <ion-grid color="barra" class="total">
-            <ion-row color="barra">
-                <ion-col size="6" color="barra">
-                    Observaciones
+        <ion-grid>
+            <ion-row>
+                <ion-col size="12" class="ion-text-center">
+                    OBSERVACIONES
                 </ion-col>
-                <ion-col size="6">
+                <ion-col size="12">
                     <ion-segment mode="ios">
                         <ion-segment-button (click)="clcObs(1)">
                             <ion-label>SI</ion-label>
                         </ion-segment-button>
-                        <ion-segment-button (click)="clcObs(0)">
+                        <ion-segment-button (click)="clcObs(2)">
                             <ion-label>NO</ion-label>
+                        </ion-segment-button>
+                    </ion-segment>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+        <!-- SOLO DELIVERY -->
+        <ion-item color="warning" *ngIf="boolDelivery && counterNegocio == 1">
+            <ion-label class="ion-text-center">
+                ÉSTA EMPRESA SOLO REALIZA DELIVERY
+            </ion-label>
+        </ion-item>
+
+        <!-- SOLO LOCAL -->
+        <ion-item color="warning" *ngIf="!boolDelivery">
+            <ion-label class="ion-text-center">
+                SOLO ENTREGA O SERVICIO <br> EN LOCAL
+            </ion-label>
+        </ion-item>
+
+        <ion-grid *ngIf="boolDelivery && counterNegocio > 1">
+            <ion-row>
+                <ion-col size="12" class="ion-text-center">
+                    ¿QUÉ DESEAS?
+                </ion-col>
+                <ion-col size="12">
+                    <ion-segment mode="ios">
+                        <ion-segment-button (click)="clcEntrega(1)">
+                            <ion-label>DELIVERY</ion-label>
+                        </ion-segment-button>
+                        <ion-segment-button (click)="clcEntrega(2)">
+                            <ion-label>RETIRO EN LOCAL</ion-label>
                         </ion-segment-button>
                     </ion-segment>
                 </ion-col>

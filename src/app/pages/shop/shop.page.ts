@@ -17,8 +17,9 @@ export class ShopPage implements OnInit {
 
   @Input() subTotal:number;
   @Input() obs:string;
+  @Input() tipo:number;
+  @Input() txtDelivery:string;
   cargando:boolean = false;
-  //daPropina:boolean = false;
   propina:number = 0;
   total:number = 0;
   boolConfirma:boolean = false;
@@ -43,6 +44,7 @@ export class ShopPage implements OnInit {
   ionViewWillEnter(){
     this.loadingService.loadingPresent();
     this.cargando = false;
+    console.log(this.tipo);
   }
 
   ionViewDidEnter() {
@@ -62,7 +64,6 @@ export class ShopPage implements OnInit {
       this.alertConsultaPropina();
     }else if( option === 0 ){
       this.propina = 0;
-      //this.daPropina = true;
       this.boolPropina = true;
       this.totalPagar(this.propina);
     }
@@ -234,20 +235,24 @@ export class ShopPage implements OnInit {
               this.toastService.presentToast('EMAIL OBLIGATORIO');
               return false;
             }
-            if( data.direccionDato == '' ){
+            if( data.direccionDato == '' && this.tipo == 1 ){
               this.toastService.presentToast('DIRECCIÓN OBLIGATORIO');
               return false;
             }
-            if( data.ciudadDato == '' ){
+            if( data.ciudadDato == '' && this.tipo == 1 ){
               this.toastService.presentToast('CIUDAD/SECTOR OBLIGATORIO');
               return false;
             }
-            if( data.nmbDato == '' || data.fonoDato == '' || data.emailDato == '' || data.direccionDato == '' || data.ciudadDato == ''){
+            if( (data.nmbDato == '' || data.fonoDato == '' || data.emailDato == '' || data.direccionDato == '' || data.ciudadDato == '') && this.tipo == 1 ){
+              this.boolConfirma = false;
+              this.boolPersona = false;
+              return false;
+            }else if( (data.nmbDato == '' || data.fonoDato == '' || data.emailDato == '') && this.tipo == 1 ){
               this.boolConfirma = false;
               this.boolPersona = false;
               return false;
             }else{
-              this.storagePersonaService.insertStorage(data.nmbDato, data.fonoDato, data.emailDato, data.direccionDato, data.ciudadDato);
+              this.storagePersonaService.insertStorage(data.nmbDato.trim(), data.fonoDato.trim(), data.emailDato.trim(), data.direccionDato.trim(), data.ciudadDato.trim());
               this.boolConfirma = true;
               this.boolPersona = true;
               return true;
@@ -283,16 +288,31 @@ export class ShopPage implements OnInit {
       this.toastService.presentToast('CONFIRMAR TUS DATOS');
       return;
     }
-    if(!this.boolConfirmarArea){
+    if(!this.boolConfirmarArea && this.tipo == 1){
       this.toastService.presentToast('CONFIRMAR QUE VIVES DENTRO DEL AREA DE REPARTO');
       return;
     }
-
-    if(this.boolPropina && this.boolPersona && this.boolConfirmarArea){
-      console.log('pago ok');
-      console.log(this.latitude);
-      console.log(this.longitude);
+    
+    if( this.tipo == 1 ){      
+      this.latitude = this.geolocationService.latitude;
+      this.longitude = this.geolocationService.longitude;
     }
+
+    if(this.boolPropina && this.boolPersona && (this.boolConfirmarArea || this.tipo == 2) ){
+      console.log('REALIZAR EL RESUMEN DEL PEDIDO');
+      console.log('latitud',this.latitude);
+      console.log('longitud',this.longitude);
+    }
+  }
+
+  async areaReparto() {
+    const alert = await this.alertController.create({
+      header: 'ÁREAS DE REPARTO',
+      message: this.txtDelivery,
+      buttons: ['CERRAR']
+    });
+
+    await alert.present();
   }
 
   salir(){

@@ -19,16 +19,14 @@ export class NosotrosPage implements OnInit {
   LONGITUD  = '';
   DIRECCION  = '';
   empresa:any = [];
+  tipoNegocio:any = [];
   cargando:boolean = false;
 
   constructor(  private empresaService:EmpresaService,
                 private iab: InAppBrowser,
                 private callNumber: CallNumber,
                 private modalCtrl:ModalController,
-                private loadingService:LoadingService) { 
-
-              this.loadingService.loadingPresent();
-  }
+                private loadingService:LoadingService) { }
 
   ngOnInit() {
     this.empresaService.getTopDatos()
@@ -38,9 +36,18 @@ export class NosotrosPage implements OnInit {
       this.LATITUD = resp.info.empresa.EMPRESA_LAT;
       this.LONGITUD = resp.info.empresa.EMPRESA_LONG;
       this.DIRECCION = resp.info.empresa.EMPRESA_DIRECCION +', '+ resp.info.empresa.CIUDAD_NOMBRE;
-      this.cargando = true;
-      this.loadingService.loadingDismiss();
+      this.tipoNegocio = resp.info.tipoNegocio;
+      console.log(this.tipoNegocio);
     });
+  }
+  ionViewWillEnter(){
+    this.loadingService.loadingPresent();
+    this.cargando = false;
+  }
+
+  ionViewDidEnter() {
+    this.cargando = true;
+    this.loadingService.loadingDismiss();
   }
 
   btnURL(url){

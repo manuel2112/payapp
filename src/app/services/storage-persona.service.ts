@@ -15,7 +15,7 @@ export class StoragePersonaService {
                public platform: Platform) { }
 
     insertStorage(nombre:string, fono:string, email:string, direccion:string, ciudad:string){
-      this.limpiarStorage();
+      this.persona = [];
       this.persona.push({
         "nombre":nombre.toUpperCase(), 
         "fono":fono.toUpperCase(), 

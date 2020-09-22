@@ -13,10 +13,12 @@ export class EmpresaService {
 
    getTopDatos(){
      return this.http.get<Info>( environment.APICliente + 'clienterest/' + environment.IDEMPRESA);
-     console.log(environment.APICliente + '/clienterest/' + environment.IDEMPRESA);
    }
    apertura(){
      return this.http.get<Info>( environment.APICliente + 'clienterest/apertura/' + environment.IDEMPRESA);
+   }
+   delivery(){
+     return this.http.get<Info>( environment.APICliente + 'clienterest/delivery/' + environment.IDEMPRESA);
    }
 
 }

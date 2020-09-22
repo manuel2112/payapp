@@ -66,15 +66,18 @@
         </ion-col>
     </ion-row>
 
-    <ion-list *ngIf="boolConfirma">
+    <ion-list *ngIf="boolConfirma && tipo == 1">
+        <ion-item color="barra">
+            <ion-button color="primary" expand="block" class="obj-center" (click)="areaReparto()">VER ÁREAS DE REPARTO AQUÍ</ion-button>
+        </ion-item>
         <ion-item color="barra">
             <ion-label>Confirmo que vivo dentro de las áreas<br> de reparto</ion-label>
             <ion-checkbox slot="end" (ionChange)="confirmarArea($event)"></ion-checkbox>
         </ion-item>
-        <ion-item color="barra">
+        <!-- <ion-item color="barra">
             <ion-label>Adjunto posición por GPS</ion-label>
-            <ion-checkbox slot="end" (ionChange)="confirmarGPS($event)"></ion-checkbox>
-        </ion-item>
+            <ion-checkbox slot="end" (ionChange)="confirmarGPS($event)" checked="true"></ion-checkbox>
+        </ion-item> -->
     </ion-list>
 
     <ion-row>
