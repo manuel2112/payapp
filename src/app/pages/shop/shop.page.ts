@@ -19,6 +19,7 @@ export class ShopPage implements OnInit {
   @Input() obs:string;
   @Input() tipo:number;
   @Input() txtDelivery:string;
+  @Input() tiempoEntrega:string;
   cargando:boolean = false;
   propina:number = 0;
   total:number = 0;
@@ -44,7 +45,6 @@ export class ShopPage implements OnInit {
   ionViewWillEnter(){
     this.loadingService.loadingPresent();
     this.cargando = false;
-    console.log(this.tipo);
   }
 
   ionViewDidEnter() {
@@ -53,7 +53,7 @@ export class ShopPage implements OnInit {
   }
 
   propinaFn(total:number){
-    let valor = total * 0.1;
+    let valor = Math.trunc(total * 0.1);
     return valor;
   }
   darPropina(option:number){
@@ -68,7 +68,7 @@ export class ShopPage implements OnInit {
       this.totalPagar(this.propina);
     }
   }
-  
+
   totalPagar(propina:number){
     this.propina = propina;
     this.total = this.subTotal + Number(propina);

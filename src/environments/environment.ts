@@ -5,8 +5,7 @@
 export const environment = {
   production: false,
   IDEMPRESA: 1 ,
-  APICliente: 'http://localhost/localfood/payapp/' ,
-  URI: 'http://localhost/localfood/payapp/'
+  URI: 'http://www.localfood.cl/app/'
 };
 
 /*

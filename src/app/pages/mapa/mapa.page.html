@@ -1,0 +1,18 @@
+<ion-header [translucent]="true" no-border>
+    <ion-toolbar color="barra">
+
+        <ion-title>{{ nmbEmpresa }}</ion-title>
+
+        <ion-button color="dark" slot=end (click)="salir()">
+            <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <h1>{{ direccion }}</h1>
+    <div #map id="map"></div>
+
+</ion-content>

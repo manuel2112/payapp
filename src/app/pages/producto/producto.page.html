@@ -40,15 +40,20 @@
 
     <ion-row *ngFor="let precio of precios" color="empresa">
         <ion-col size="8">
-            {{ precio.PROVAR_VALOR | peso }} <br/>{{ precio.PROVAR_DESC ? precio.PROVAR_DESC : 'Valor normal' }}
+            {{ precio.PROVAR_VALOR | peso }}
+            <span class="aviso" *ngIf="precio.PROVAR_STOCK == 0">SIN STOCK</span>
+            <span class="aviso" *ngIf="stock[precio.PROVAR_ID] > 0">STOCK MÁXIMO</span>
+            <br/> {{ precio.PROVAR_DESC }}
         </ion-col>
         <ion-col size="4" class="operador">
-            <ion-icon name="remove-outline" *ngIf="cantidad[precio.PROVAR_ID] > 0" (click)="restar(producto.PRODUCTO_NOMBRE , precio, cantidad[precio.PROVAR_ID])"></ion-icon>
+            <ion-icon name="remove-outline" *ngIf="cantidad[precio.PROVAR_ID] > 0" (click)="restar(producto.PRODUCTO_NOMBRE , precio, cantidad[precio.PROVAR_ID], precio.PROVAR_STOCK)"></ion-icon>
             <ion-icon name="remove-outline" *ngIf="!cantidad[precio.PROVAR_ID]"></ion-icon>
 
             <span>{{ cantidad[precio.PROVAR_ID] }}</span>
 
-            <ion-icon name="add-outline" (click)="sumar(producto.PRODUCTO_NOMBRE , precio, cantidad[precio.PROVAR_ID])"></ion-icon>
+            <ion-icon name="add-outline" *ngIf="precio.PROVAR_STOCK == 0 || stock[precio.PROVAR_ID] > 0"></ion-icon>
+            <ion-icon name="add-outline" *ngIf="(precio.PROVAR_STOCK > 0) && (!stock[precio.PROVAR_ID]) || !precio.PROVAR_STOCK " (click)="sumar(producto.PRODUCTO_NOMBRE , precio, cantidad[precio.PROVAR_ID], precio.PROVAR_STOCK)"></ion-icon>
+
         </ion-col>
     </ion-row>
 

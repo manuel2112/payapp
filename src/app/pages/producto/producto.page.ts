@@ -18,6 +18,7 @@ export class ProductoPage implements OnInit {
   cargando:boolean = false;
   pager:boolean = false;
   disabled:boolean = true;
+  stock:any = [] ;
   producto:any = [];
   precios:any = [];
   imagenes:any = [];
@@ -29,19 +30,14 @@ export class ProductoPage implements OnInit {
                private menuService:MenuService,
                private loadingService:LoadingService,
                private modalCtrl:ModalController,
-               private storageService:StorageService) {
-                
-            this.instanciar();
-  }
+               private storageService:StorageService) {}
 
-  instanciar(){
+  ionViewWillEnter(){
     this.loadingService.loadingPresent();
-    this.pager = this.imagenes.length > 0 ? true : false;
-    this.storageService.cargarStorage();
-    this.countShop = this.storageService.countProductos();
+    this.cargando = false;
+    this.instanciar();
   }
-
-  ngOnInit() {
+  instanciar(){
     this.id = this.route.snapshot.paramMap.get('id');
     this.menuService.getProducto(this.id)
     .subscribe( (resp:any)  => {
@@ -53,10 +49,18 @@ export class ProductoPage implements OnInit {
       this.cargando = true;
       this.loadingService.loadingDismiss();
     });
+    // this.pager = this.imagenes.length > 0 ? true : false;
+    this.storageService.cargarStorage();
+    this.countShop = this.storageService.countProductos();
+  }
+  ionViewDidEnter() {
+    this.loadingService.loadingDismiss();
+    this.cargando = true;
+  }
+  ngOnInit() {
   }
 
   existeProducto(objeto:any){
-
     const carrito = objeto;
     this.disabled = true;
     objeto.forEach((obj, i) => {
@@ -70,8 +74,7 @@ export class ProductoPage implements OnInit {
     });
   }
   
-  async abrirImagen(img:string,producto:string){
-    
+  async abrirImagen(img:string,producto:string){    
     const modal = await this.modalCtrl.create({
         component: ZoomImagenPage,
         componentProps: {
@@ -95,28 +98,34 @@ export class ProductoPage implements OnInit {
     this.countShop = this.storageService.countProductos();
 
   }
-  restar(nmbPro:string, varPro:any, cantidad:number){
+  restar(nmbPro:string, varPro:any, cantidad:number, stock:number){
     if ( !cantidad ){
       cantidad = 0 ;
     }
     if ( cantidad > 0 ){
       cantidad--;
-    }    
+    }
+    if ( stock > cantidad ){
+      this.stock[varPro.PROVAR_ID] = '';
+    }
     this.cantidad[varPro.PROVAR_ID] = cantidad;
     this.storageService.insertStorage(nmbPro, varPro, cantidad);
     if( cantidad == 0 ){
       var counter = this.storageService.countProductos();
-      this.storageService.borrar( counter -1 );
+      this.storageService.borrarUltimo( counter - 1 );
       this.existeProducto(this.precios);
       this.countShop = this.storageService.countProductos();
     }
 
   }
-  sumar(nmbPro:string, varPro:any, cantidad:number){
+  sumar(nmbPro:string, varPro:any, cantidad:number, stock:number){
     if ( !cantidad ){
       cantidad = 0 ;
     }
-    cantidad++;   
+    cantidad++;    
+    if( cantidad == stock ){
+      this.stock[varPro.PROVAR_ID] = stock;
+    }
     this.cantidad[varPro.PROVAR_ID] = cantidad;
     this.storageService.insertStorage(nmbPro, varPro, cantidad);
     this.countShop = this.storageService.countProductos();

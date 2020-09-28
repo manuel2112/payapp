@@ -22,6 +22,7 @@
     "@angular/router": "~9.1.6",
     "@ionic-native/call-number": "^5.27.0",
     "@ionic-native/core": "^5.22.0-beta-1",
+    "@ionic-native/fcm": "^5.28.0",
     "@ionic-native/geolocation": "^5.28.0",
     "@ionic-native/google-maps": "^5.27.0-beta-20200630",
     "@ionic-native/in-app-browser": "^5.27.0",
@@ -32,6 +33,7 @@
     "agm-direction": "^0.8.6",
     "browse": "0.4.0",
     "call-number": "^1.0.1",
+    "cordova-android": "9.0.0",
     "cordova-browser": "6.0.0",
     "cordova-plugin-inappbrowser": "^4.0.0",
     "rxjs": "~6.5.1",
@@ -49,6 +51,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
     "codelyzer": "^5.1.2",
+    "cordova-androidx-build": "^1.0.4",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-geolocation": "^4.0.2",
     "cordova-plugin-googlemaps": "git+https://github.com/mapsplugin/cordova-plugin-googlemaps.git#multiple_maps",
@@ -75,7 +78,10 @@
     "plugins": {
       "cordova-plugin-inappbrowser": {},
       "mx.ferreyra.callnumber": {},
-      "cordova-plugin-googlemaps": {},
+      "cordova-plugin-googlemaps": {
+        "API_KEY_FOR_ANDROID": "AIzaSyBpfsCRBII3vxynSma0HVsFV-7QMnSDHlg",
+        "API_KEY_FOR_IOS": "AIzaSyBpfsCRBII3vxynSma0HVsFV-7QMnSDHlg"
+      },
       "cordova-plugin-whitelist": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-device": {},
@@ -86,7 +92,8 @@
       "cordova-plugin-geolocation": {}
     },
     "platforms": [
-      "browser"
+      "browser",
+      "android"
     ]
   }
 }

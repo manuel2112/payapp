@@ -10,11 +10,11 @@ export class MenuService {
   constructor( private http:HttpClient ) {  }
 
   getMenu(){
-    return this.http.get( environment.APICliente + 'menurest/' + environment.IDEMPRESA );
+    return this.http.get( environment.URI + 'menurest/' + environment.IDEMPRESA );
   }
 
   getProducto(id:number){
-    return this.http.get( environment.APICliente + 'menurest/producto/' + id );
+    return this.http.get( environment.URI + 'menurest/producto/' + id );
   }
 
 }

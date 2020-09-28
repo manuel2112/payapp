@@ -16,23 +16,27 @@ export class Tab2Page implements OnInit {
 
   constructor( private menuService:MenuService,
                private loadingService:LoadingService,
-               private router: Router) {
-                this.loadingService.loadingPresent();
-  }
+               private router: Router) {}
 
   ngOnInit(){
+  }
+  ionViewWillEnter(){
+    this.loadingService.loadingPresent();
+    this.cargando = false;
+    this.instanciar();
+  }
+  instanciar(){
     this.menuService.getMenu()
     .subscribe( (resp:any)  => {
       this.menu = resp.info;
-      this.cargando = true;
-      this.loadingService.loadingDismiss();
     });
   }
-
-  detalle(id:number){
-    
+  ionViewDidEnter() {
+    this.loadingService.loadingDismiss();
+    this.cargando = true;
+  }
+  detalle(id:number){    
     this.router.navigate(['/producto',{ id: id }]);
-
   }
 
 }

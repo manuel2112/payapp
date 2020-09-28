@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
-import { environment} from '../../environments/environment';
+import { environment } from '../../environments/environment.prod';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
 @Injectable({
@@ -71,6 +71,11 @@ export class StorageService {
     return pagar;
   }
 
+  borrarUltimo(i:number){
+    this.shoping.splice( i, 1);
+    this.guardarStorage();
+  }
+
   borrar(i:number){
     this.comprobarProductoIngresado(i);
     this.guardarStorage();
@@ -123,6 +128,7 @@ export class StorageService {
   countProductos(){
 
     if(this.platform.is('cordova')){
+      return this.shoping.length;
     }else{
       return this.shoping.length;
     }

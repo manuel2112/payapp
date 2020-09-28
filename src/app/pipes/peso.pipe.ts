@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class PesoPipe implements PipeTransform {
 
-  transform(value: string): string {
+  transform(value: any): string {
 
     value = value.toString()
     while (true) {

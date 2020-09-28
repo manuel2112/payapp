@@ -28,41 +28,44 @@ export class Tab1Page implements OnInit {
                private ofertaService:OfertasService,
                private loadingService:LoadingService,
                private router: Router ) {
-            
-            this.loadingService.loadingPresent();
-            this.getOfertas();
-            this.getDestacados();
-            this.updateHorarioTimer();
+                 
+                }
+
+  ionViewWillEnter(){
+    this.loadingService.loadingPresent();
+    this.cargando = false;
+    this.instanciar();
   }
 
-  ngOnInit(){    
-    this.empresaService.getTopDatos()
-    .subscribe( (resp:any)  => {
-      this.empresa = resp.info.empresa;
-      this.ABIERTO = resp.info.empresa.EMPRESA_ABIERTO;
-      this.horaCierre = resp.info.hora.HORARIO_HORA_CLOSE;
-      this.cargando = true;
-      this.loadingService.loadingDismiss();
-      this.countdown(resp.info.segundos);
-    })
+  instanciar(){
+    this.getEmpresa();
+    this.getOfertas();
+    this.getDestacados();
+    this.updateHorarioTimer();
+  }
+
+  ionViewDidEnter() {
+    this.loadingService.loadingDismiss();
+    this.cargando = true;
+  }
+
+  ngOnInit(){
   }
 
   updateHorario() {
-
       this.empresaService.apertura()
       .subscribe( (resp:any)  => {
         this.ABIERTO    = resp.info.empresa.EMPRESA_ABIERTO;
         this.horaCierre = resp.info.hora.HORARIO_HORA_CLOSE;
         this.countdown(resp.info.segundos);
       });
-
   }
+
   updateHorarioTimer() {
     setInterval(() => { this.updateHorario(); }, 60000);
   }
 
   countdown(seconds:number) {
-
     var i = 0;
     if( this.ABIERTO == 0 ){
       var refreshId = setInterval(() => { 
@@ -87,7 +90,17 @@ export class Tab1Page implements OnInit {
         }
       }, 1000);
     }
+  }
 
+  getEmpresa(){
+    this.empresaService.getTopDatos()
+    .subscribe( (resp:any)  => {
+      this.empresa = resp.info.empresa;
+      this.ABIERTO = resp.info.empresa.EMPRESA_ABIERTO;
+      this.horaCierre = resp.info.hora.HORARIO_HORA_CLOSE;
+      this.cargando = true;
+      this.countdown(resp.info.segundos);
+    });
   }
 
   getOfertas(){      

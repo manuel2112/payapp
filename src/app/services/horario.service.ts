@@ -11,7 +11,7 @@ export class HorarioService {
    }
 
   getDatos(){
-    return this.http.get( environment.APICliente + 'horariorest/' + environment.IDEMPRESA);
+    return this.http.get( environment.URI + 'horariorest/' + environment.IDEMPRESA);
   }
   
 }

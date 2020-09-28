@@ -9,7 +9,6 @@ import { LoadingService } from '../../services/loading.service';
 import { ToastService } from '../../services/toast.service';
 import { StorageService } from '../../services/storage.service';
 import { EmpresaService } from '../../services/empresa.service';
-import { ReturnStatement } from '@angular/compiler';
 
 @Component({
   selector: 'app-tab3',
@@ -27,6 +26,7 @@ export class Tab3Page {
   txtDelivery:string = '';
   boolDelivery:boolean = false;
   counterNegocio:number = 0;
+  tiempoEntrega:string = '';
 
   constructor( private loadingService:LoadingService,
                private storageService:StorageService,
@@ -51,6 +51,7 @@ export class Tab3Page {
         this.txtDelivery = resp.info.existeDelivery ? resp.info.delivery.EMPRESA_TIPO_NEGOCIO_OBS : '';
         this.boolDelivery = resp.info.existeDelivery;
         this.counterNegocio = resp.info.counterTipos;
+        this.tiempoEntrega = resp.info.tiempoEntrega.EMPRESA_T_ENTREGA;
         if( this.boolDelivery && this.counterNegocio == 1){
           this.tipoEntrega = 1;
         }
@@ -102,7 +103,8 @@ export class Tab3Page {
           subTotal: this.totalProductos,
           obs: this.txtObs,
           tipo: this.tipoEntrega,
-          txtDelivery: this.txtDelivery
+          txtDelivery: this.txtDelivery,
+          tiempoEntrega: this.tiempoEntrega
         }
       });
 

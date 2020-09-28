@@ -4,6 +4,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 
 import { MapPage } from '../map/map.page';
+import { MapaPage } from '../mapa/mapa.page';
 import { EmpresaService } from '../../services/empresa.service';
 import { LoadingService } from '../../services/loading.service';
 
@@ -12,7 +13,7 @@ import { LoadingService } from '../../services/loading.service';
   templateUrl: './nosotros.page.html',
   styleUrls: ['./nosotros.page.scss'],
 })
-export class NosotrosPage implements OnInit {  
+export class NosotrosPage implements OnInit {
 
   NMBEMPRESA = '';
   LATITUD  = '';
@@ -26,9 +27,17 @@ export class NosotrosPage implements OnInit {
                 private iab: InAppBrowser,
                 private callNumber: CallNumber,
                 private modalCtrl:ModalController,
-                private loadingService:LoadingService) { }
+                private loadingService:LoadingService) { }           
 
   ngOnInit() {
+  }
+  ionViewWillEnter(){
+    this.loadingService.loadingPresent();
+    this.cargando = false;
+    this.instanciar();
+  }
+
+  instanciar(){
     this.empresaService.getTopDatos()
     .subscribe( (resp:any)  => {
       this.empresa = resp.info.empresa;
@@ -37,17 +46,12 @@ export class NosotrosPage implements OnInit {
       this.LONGITUD = resp.info.empresa.EMPRESA_LONG;
       this.DIRECCION = resp.info.empresa.EMPRESA_DIRECCION +', '+ resp.info.empresa.CIUDAD_NOMBRE;
       this.tipoNegocio = resp.info.tipoNegocio;
-      console.log(this.tipoNegocio);
     });
-  }
-  ionViewWillEnter(){
-    this.loadingService.loadingPresent();
-    this.cargando = false;
   }
 
   ionViewDidEnter() {
-    this.cargando = true;
     this.loadingService.loadingDismiss();
+    this.cargando = true;
   }
 
   btnURL(url){
@@ -68,7 +72,7 @@ export class NosotrosPage implements OnInit {
   async abrirMapa(){
     
     const modal = await this.modalCtrl.create({
-        component: MapPage,
+        component: MapaPage,
         componentProps: {
           lat: this.LATITUD,
           lgt: this.LONGITUD,

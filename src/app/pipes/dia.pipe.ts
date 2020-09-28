@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class DiaPipe implements PipeTransform {
 
-  transform(valor: string, texto: string): string {
+  transform(valor: any): string {
 
     let txt;
 
