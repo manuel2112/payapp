@@ -18,23 +18,23 @@
     <p class="txt-contenido" *ngFor="let negocio of tipoNegocio"><strong>{{ negocio.TIPO_NEGOCIO_NOMBRE }}</strong>: {{ negocio.EMPRESA_TIPO_NEGOCIO_OBS }}</p>
 
     <div class="btns-center">
-        <ion-button color="primary" *ngIf="empresa.EMPRESA_FACEBOOK " (click)="btnURL(empresa.EMPRESA_FACEBOOK)">
+        <ion-button color="primary" *ngIf="empresa.EMPRESA_FACEBOOK" (click)="btnFacebook(empresa.EMPRESA_FACEBOOK)">
             <ion-icon name="logo-facebook"></ion-icon>
         </ion-button>
 
-        <ion-button color="instagram" *ngIf="empresa.EMPRESA_INSTAGRAM" (empresa.EMPRESA_INSTAGRAM)="btnURL(empresa.EMPRESA_INSTAGRAM)">
+        <ion-button color="instagram" *ngIf="empresa.EMPRESA_INSTAGRAM" (click)="btnInstagram(empresa.EMPRESA_INSTAGRAM)">
             <ion-icon name="logo-instagram"></ion-icon>
         </ion-button>
 
-        <ion-button color="web" *ngIf="empresa.EMPRESA_WEB" (click)="btnURL(empresa.EMPRESA_WEB)">
+        <ion-button color="web" *ngIf="empresa.EMPRESA_WEB" (click)="btnWeb(empresa.EMPRESA_WEB)">
             <ion-icon name="globe-outline"></ion-icon>
         </ion-button>
 
-        <ion-button color="whatsapp" *ngIf="empresa.EMPRESA_FONO" (click)="msnWhatsAPP(empresa.EMPRESA_FONO)">
+        <ion-button color="whatsapp" *ngIf="empresa.EMPRESA_FONO" (click)="btnWhatsapp(empresa.EMPRESA_FONO)">
             <ion-icon name="logo-whatsapp"></ion-icon>
         </ion-button>
 
-        <ion-button color="phone" *ngIf="empresa.EMPRESA_FONO" (click)="callPhone(empresa.EMPRESA_FONO)">
+        <ion-button color="phone" *ngIf="empresa.EMPRESA_FONO" (click)="btnFono(empresa.EMPRESA_FONO)">
             <ion-icon name="call"></ion-icon>
         </ion-button>
 

@@ -15,8 +15,6 @@ import { PipesModule } from './pipes/pipes.module';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { CallNumber } from '@ionic-native/call-number/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { AgmCoreModule } from '@agm/core';            // @agm/core
-import { AgmDirectionModule } from 'agm-direction';   // agm-direction
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { FCM } from '@ionic-native/fcm/ngx';
 

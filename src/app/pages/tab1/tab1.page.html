@@ -69,19 +69,19 @@
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="top">
-            <ion-fab-button color="primary" *ngIf="empresa.EMPRESA_FACEBOOK" (click)="btnURL(empresa.EMPRESA_FACEBOOK)">
+            <ion-fab-button color="primary" *ngIf="empresa.EMPRESA_FACEBOOK" (click)="btnFacebook(empresa.EMPRESA_FACEBOOK)">
                 <ion-icon name="logo-facebook"></ion-icon>
             </ion-fab-button>
-            <ion-fab-button color="instagram" *ngIf="empresa.EMPRESA_INSTAGRAM" (click)="btnURL(empresa.EMPRESA_INSTAGRAM)">
+            <ion-fab-button color="instagram" *ngIf="empresa.EMPRESA_INSTAGRAM" (click)="btnInstagram(empresa.EMPRESA_INSTAGRAM)">
                 <ion-icon name="logo-instagram"></ion-icon>
             </ion-fab-button>
-            <ion-fab-button color="web" *ngIf="empresa.EMPRESA_WEB" (click)="btnURL(empresa.EMPRESA_WEB)">
+            <ion-fab-button color="web" *ngIf="empresa.EMPRESA_WEB" (click)="btnWeb(empresa.EMPRESA_WEB)">
                 <ion-icon name="globe-outline"></ion-icon>
             </ion-fab-button>
-            <ion-fab-button color="whatsapp" *ngIf="empresa.EMPRESA_FONO" (click)="msnWhatsAPP(empresa.EMPRESA_FONO)">
+            <ion-fab-button color="whatsapp" *ngIf="empresa.EMPRESA_FONO" (click)="btnWhatsapp(empresa.EMPRESA_FONO)">
                 <ion-icon name="logo-whatsapp"></ion-icon>
             </ion-fab-button>
-            <ion-fab-button color="phone" *ngIf="empresa.EMPRESA_FONO" (click)="callPhone(empresa.EMPRESA_FONO)">
+            <ion-fab-button color="phone" *ngIf="empresa.EMPRESA_FONO" (click)="btnFono(empresa.EMPRESA_FONO)">
                 <ion-icon name="call"></ion-icon>
             </ion-fab-button>
         </ion-fab-list>

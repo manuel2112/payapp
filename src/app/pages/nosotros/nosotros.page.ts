@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { CallNumber } from '@ionic-native/call-number/ngx';
 
-import { MapPage } from '../map/map.page';
 import { MapaPage } from '../mapa/mapa.page';
 import { EmpresaService } from '../../services/empresa.service';
+import { SocialService } from '../../services/social.service';
 import { LoadingService } from '../../services/loading.service';
 
 @Component({
@@ -24,10 +22,9 @@ export class NosotrosPage implements OnInit {
   cargando:boolean = false;
 
   constructor(  private empresaService:EmpresaService,
-                private iab: InAppBrowser,
-                private callNumber: CallNumber,
                 private modalCtrl:ModalController,
-                private loadingService:LoadingService) { }           
+                private loadingService:LoadingService,
+                private socialService:SocialService) { }           
 
   ngOnInit() {
   }
@@ -54,21 +51,6 @@ export class NosotrosPage implements OnInit {
     this.cargando = true;
   }
 
-  btnURL(url){
-    const browser = this.iab.create(url);
-    browser.close();
-  }
-
-  callPhone(number){
-    this.callNumber.callNumber(number, true)
-    .then(res => console.log('Launched dialer!', res))
-    .catch(err => console.log('Error launching dialer', err));
-  }
-
-  msnWhatsAPP(number){ const browser = this.iab.create('https://api.whatsapp.com/send?phone='+number);
-    browser.close();
-  }
-
   async abrirMapa(){
     
     const modal = await this.modalCtrl.create({
@@ -81,6 +63,25 @@ export class NosotrosPage implements OnInit {
         }
       });
       await modal.present();
+  }
+
+  /******************************/
+  /*********SOCIAL***************/
+  /******************************/
+  btnFacebook(url:string){
+    this.socialService.facebook(url);
+  }
+  btnInstagram(url:string){
+    this.socialService.instagram(url);
+  }
+  btnWeb(url:string){
+    this.socialService.web(url);
+  }
+  btnWhatsapp(number:string){
+    this.socialService.whatsapp(number);
+  }
+  btnFono(number:string){
+    this.socialService.fono(number);
   }
 
 }

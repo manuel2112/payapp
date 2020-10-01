@@ -15,10 +15,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/nosotros/nosotros.module').then( m => m.NosotrosPageModule)
   },
   {
-    path: 'map',
-    loadChildren: () => import('./pages/map/map.module').then( m => m.MapPageModule)
-  },
-  {
     path: 'horario',
     loadChildren: () => import('./pages/horario/horario.module').then( m => m.HorarioPageModule)
   },
