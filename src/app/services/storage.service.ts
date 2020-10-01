@@ -10,14 +10,15 @@ export class StorageService {
 
   shoping:any = [];
   nmbSetProductos:string = 'item-' + environment.IDEMPRESA;
+  objProductos:any = [];
 
   constructor( private nativeStorage: NativeStorage,
                public platform: Platform) { }
 
-  insertStorage(nmbPro:string, varPro:any, cantidad:number){       
+  insertStorage(nmbPro:string, varPro:any, cantidad:number){
     this.comprobarProductoIngresado(varPro.PROVAR_ID);
     this.shoping.push({"nmbPro":nmbPro, "varPro":varPro, "cantidad":cantidad });
-    this.guardarStorage();                  
+    this.guardarStorage();
   }
 
   guardarStorage(){
@@ -81,12 +82,12 @@ export class StorageService {
     this.guardarStorage();
   }
              
-  cargarStorage(){
+  getStorage(){
 
     if(this.platform.is('cordova')){
       this.nativeStorage.getItem(this.nmbSetProductos)
       .then(
-        data => console.log(data),
+        data => this.shoping = data ? data : [],
         error => console.error(error)
       );
     }else{
@@ -100,55 +101,16 @@ export class StorageService {
     }
   }
              
-  getStorage(){
-
-    if(this.platform.is('cordova')){
-      this.nativeStorage.getItem(this.nmbSetProductos)
-      .then(
-        data => console.log(data),
-        error => console.error(error)
-      );
-    }else{
-
-      if( localStorage.getItem(this.nmbSetProductos) ){
-        return this.orderProductos();
-      }else{
-        return [];
-      }
-
-    }
-  }
-
-  orderProductos(){
-    let data = JSON.parse(localStorage.getItem(this.nmbSetProductos));
-    let val = data.sort((a, b) => (a.varPro.PROVAR_ID > b.varPro.PROVAR_ID) ? 1 : -1 );
-    return val;
-  }
-             
   countProductos(){
-
-    if(this.platform.is('cordova')){
-      return this.shoping.length;
-    }else{
-      return this.shoping.length;
-    }
-
+    return this.shoping.length;
   }
              
   limpiarStorage(){
-
     if(this.platform.is('cordova')){
-      this.nativeStorage.setItem(this.nmbSetProductos, [])
-      .then(
-      () => {
-        console.log('Stored item!');
-      },
-        error => console.error('Error storing item', error)
-      );
+      this.nativeStorage.remove(this.nmbSetProductos);
     }else{
       localStorage.removeItem(this.nmbSetProductos);
     }
-
   }
 
 }

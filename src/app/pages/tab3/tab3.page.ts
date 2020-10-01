@@ -68,31 +68,39 @@ export class Tab3Page {
   }
 
   cargarProductos(){
-    this.productos = this.storageService.getStorage();
+    this.storageService.getStorage();
+    this.productos = this.storageService.shoping;
     this.totalProductos = this.storageService.totalPagar(this.productos);
   }
 
   eliminarVarPro(idVarPro:number){
-    this.cargando = false;
-    this.loadingService.loadingPresent();    
+    this.loadingService.loadingPresent(); 
+    this.cargando = false;   
     this.storageService.borrar(idVarPro);
-    this.productos = this.storageService.getStorage();
-    this.totalProductos = this.storageService.totalPagar(this.productos);
-    this.cargando = true;
+    this.cargarProductos();
     this.tabspage.counterShop();
+    this.cargando = true;
     this.loadingService.loadingDismiss();
     this.toastService.presentToast('Producto eliminado');
   }
 
   restar(nmbPro:string, varPro:any, cantidad:number){
+    this.loadingService.loadingPresent();
+    this.cargando = false;
     cantidad--;
     this.storageService.insertStorage(nmbPro, varPro, cantidad);
     this.cargarProductos();
+    this.cargando = true;
+    this.loadingService.loadingDismiss();
   }
   sumar(nmbPro:string, varPro:any, cantidad:number){
+    this.loadingService.loadingPresent();
+    this.cargando = false;
     cantidad++;
     this.storageService.insertStorage(nmbPro, varPro, cantidad);
     this.cargarProductos();
+    this.cargando = true;
+    this.loadingService.loadingDismiss();
   }
 
   async abrirShop(){

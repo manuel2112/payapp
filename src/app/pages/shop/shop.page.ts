@@ -29,7 +29,7 @@ export class ShopPage implements OnInit {
   boolConfirmarArea:boolean = false;
   latitude:number = null;
   longitude:number = null;
-  persona:string = '';
+  persona:any = [];
 
   constructor( private modalCtrl:ModalController,
                private loadingService:LoadingService,
@@ -146,8 +146,8 @@ export class ShopPage implements OnInit {
   datosStoragePersona(st:string){
 
     let atributo;
-    let valor = this.storagePersonaService.getStorage();
-    this.persona = valor;
+    this.storagePersonaService.getStorage();
+    let valor = this.storagePersonaService.persona;
     switch(st) { 
       case 'nombre': { 
         atributo = valor[0].nombre;
@@ -302,6 +302,7 @@ export class ShopPage implements OnInit {
       console.log('REALIZAR EL RESUMEN DEL PEDIDO');
       console.log('latitud',this.latitude);
       console.log('longitud',this.longitude);
+      this.toastService.presentToast('PAGO REALIZADO');
     }
   }
 

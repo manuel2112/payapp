@@ -12,7 +12,7 @@ export class TabsPage {
   constructor( private storageService:StorageService ) {}
 
   ionViewWillEnter(){
-    this.storageService.cargarStorage();
+    this.storageService.getStorage();
     this.counterShop();
   }
 

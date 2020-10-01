@@ -19,7 +19,7 @@
     </div>
 
     <div *ngIf="productos.length > 0">
-        <ion-grid *ngFor="let producto of productos; let i=index">
+        <ion-grid *ngFor="let producto of (productos | ordenProducto); let i=index">
             <ion-row>
                 <ion-col>
                     {{ producto.nmbPro }} - {{ producto.varPro.PROVAR_DESC }}
@@ -106,8 +106,5 @@
             </ion-col>
         </ion-row>
     </div>
-
-
-
 
 </ion-content>

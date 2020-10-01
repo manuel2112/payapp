@@ -44,14 +44,14 @@ export class StoragePersonaService {
   
       if(this.platform.is('cordova')){
         this.nativeStorage.getItem(this.nmbSetPersona)
-        .then(
-          data => console.log(data),
+        .then(          
+          data => this.persona = data ? data : [],
           error => console.error(error)
         );
       }else{
   
         if( localStorage.getItem(this.nmbSetPersona) ){
-          return JSON.parse(localStorage.getItem(this.nmbSetPersona));
+          this.persona = JSON.parse(localStorage.getItem(this.nmbSetPersona));
         }else{
           return [];
         }
@@ -60,27 +60,19 @@ export class StoragePersonaService {
     }
 
     existePersona(){
-      let obj = this.getStorage();
-      let counter = obj.length;
-      if( counter > 0 ){
+      this.getStorage();
+      let obj = this.persona;
+      if( obj ){
         return true;
       }
       return false;
     }
              
-    limpiarStorage(){
-  
+    limpiarStorage(){  
       if(this.platform.is('cordova')){
-        this.nativeStorage.setItem(this.nmbSetPersona, [])
-        .then(
-        () => {
-          console.log('Stored item!');
-        },
-          error => console.error('Error storing item', error)
-        );
+        this.nativeStorage.remove(this.nmbSetPersona);
       }else{
         localStorage.removeItem(this.nmbSetPersona);
-      }
-  
+      }  
     }
 }

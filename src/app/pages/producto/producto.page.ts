@@ -50,7 +50,7 @@ export class ProductoPage implements OnInit {
       this.loadingService.loadingDismiss();
     });
     // this.pager = this.imagenes.length > 0 ? true : false;
-    this.storageService.cargarStorage();
+    this.storageService.getStorage();
     this.countShop = this.storageService.countProductos();
   }
   ionViewDidEnter() {
