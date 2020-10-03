@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1039558186058",
+    "firebase_url": "https://payapp-test-5c001.firebaseio.com",
+    "project_id": "payapp-test-5c001",
+    "storage_bucket": "payapp-test-5c001.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1039558186058:android:9959d01d6ada6fe3dec2b3",
+        "android_client_info": {
+          "package_name": "cl.localfood.master"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1039558186058-hfn7g7o4mgn7dujub4udb8djdh071efj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwePahmNs2Egl8ujSsaS-eEs9EnL1gEQc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1039558186058-hfn7g7o4mgn7dujub4udb8djdh071efj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

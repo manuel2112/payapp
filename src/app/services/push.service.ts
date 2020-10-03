@@ -1,55 +1,39 @@
 import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
 
-// import { INotificationPayload } from 'cordova-plugin-fcm-with-dependecy-updated';
-// import { FCM } from '@ionic-native/fcm/ngx';
+import { FCM } from "cordova-plugin-fcm-with-dependecy-updated/ionic/ngx";
 
 @Injectable({
   providedIn: 'root'
 })
 export class PushService {
-  // public hasPermission: boolean;
-  // public token: string;
-  // public pushPayload: INotificationPayload;
 
-  constructor( ) { 
+  constructor( private platform: Platform, 
+               private fcm: FCM ) { }
 
-    // this.setupFCM();
-
-  }
+  initPushNotification() {
   
-  // async setupFCM() {
-  //   await this.platform.ready();
-  //   console.log('FCM setup started');
+    this.fcm.subscribeToTopic('people');
 
-  //   if (!this.platform.is('cordova')) {
-  //     return;
-  //   }
-  //   console.log('In cordova platform');
+    this.fcm.getToken().then(token => {
+      console.log('token: ',token);
+    });
 
-  //   console.log('Subscribing to token updates');
-  //   this.fcm.onTokenRefresh().subscribe((newToken) => {
-  //     this.token = newToken;
-  //     console.log('onTokenRefresh received event with: ', newToken);
-  //   });
+    this.fcm.onNotification().subscribe(data => {
+      console.log(data);
+      if (data.wasTapped) {
+        console.log('Received in background');
+        // this.router.navigate([data.landing_page, data.price]);
+      } else {
+        console.log('Received in foreground');
+        // this.router.navigate([data.landing_page, data.price]);
+      }
+    });
 
-  //   console.log('Subscribing to new notifications');
-  //   this.fcm.onNotification().subscribe((payload) => {
-  //     this.pushPayload = payload;
-  //     console.log('onNotification received event with: ', payload);
-  //   });
+    this.fcm.onTokenRefresh().subscribe(token => {
+      console.log(token);
+    });
 
-  //   // this.hasPermission = await this.fcm.requestPushPermission();
-  //   // console.log('requestPushPermission result: ', this.hasPermission);
-
-  //   this.token = await this.fcm.getToken();
-  //   console.log('getToken result: ', this.token);
-
-  //   // this.pushPayload = await this.fcm.getInitialPushPayload();
-  //   // console.log('getInitialPushPayload result: ', this.pushPayload);
-  // }
-
-  // public get pushPayloadString() {
-  //   return JSON.stringify(this.pushPayload, null, 4);
-  // }
+    // this.fcm.unsubscribeFromTopic('marketing');
+    }
 }
