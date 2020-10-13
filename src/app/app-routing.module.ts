@@ -33,7 +33,11 @@ const routes: Routes = [
   {
     path: 'mapa',
     loadChildren: () => import('./pages/mapa/mapa.module').then( m => m.MapaPageModule)
+  },  {
+    path: 'notificacion',
+    loadChildren: () => import('./pages/notificacion/notificacion.module').then( m => m.NotificacionPageModule)
   }
+
 ];
 @NgModule({
   imports: [

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="cl.localfood.master" version="2.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>PAY</name>
+<widget id="cl.localfood.master" version="2.1.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>PANCHITO</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="manuel2112@hotmail.com" href="http://ionicframework.com/">Ionic Framework Team</author>
     <content src="index.html" />
@@ -21,9 +21,6 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="GOOGLE_MAPS_ANDROID_API_KEY" />
     <platform name="android">
-        <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
-            <application android:networkSecurityConfig="@xml/network_security_config" />
-        </edit-config>
         <resource-file src="resources/android/xml/network_security_config.xml" target="app/src/main/res/xml/network_security_config.xml" />
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
@@ -44,6 +41,12 @@
         <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+        <resource-file src="resources/android/notification/drawable-xhdpi/fcm_push_icon.png" target="app/src/main/res/drawable/fcm_push_icon.png" />
+        <resource-file src="resources/android/notification/drawable-hdpi/fcm_push_icon.png" target="platforms/android/res/drawable-hdpi/fcm_push_icon.png" />
+        <resource-file src="resources/android/notification/drawable-mdpi/fcm_push_icon.png" target="platforms/android/res/drawable-mdpi/fcm_push_icon.png" />
+        <resource-file src="resources/android/notification/drawable-xhdpi/fcm_push_icon.png" target="platforms/android/res/drawable-xhdpi/fcm_push_icon.png" />
+        <resource-file src="resources/android/notification/drawable-xxhdpi/fcm_push_icon.png" target="platforms/android/res/drawable-xxhdpi/fcm_push_icon.png" />
+        <resource-file src="resources/android/notification/drawable-xxxhdpi/fcm_push_icon.png" target="platforms/android/res/drawable-xxxhdpi/fcm_push_icon.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />

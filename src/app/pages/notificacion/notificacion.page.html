@@ -1,0 +1,29 @@
+<ion-header [translucent]="true" no-border>
+    <ion-toolbar color="barra">
+
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="tabs/tab2"></ion-back-button>
+        </ion-buttons>
+        <ion-title>NOTIFICACIÓN</ion-title>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="cargando" padding color="empresa">
+
+    <ion-card *ngFor="let notificacion of notificaciones">
+        <ion-item>
+            <ion-card-subtitle>{{ notificacion.PUSH_DATE | date }}</ion-card-subtitle>
+            <ion-button fill="outline" slot="end" *ngIf="notificacion.PRODUCTO_ID != 0" (click)="detalle(notificacion.PRODUCTO_ID)">VER</ion-button>
+        </ion-item>
+        <ion-card-header>
+            <ion-card-title>{{ notificacion.PUSH_TITLE }}</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+            {{ notificacion.PUSH_TEXTO }}
+        </ion-card-content>
+    </ion-card>
+
+
+</ion-content>

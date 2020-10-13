@@ -2,23 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { LoadingService } from '../../services/loading.service';
-import { MenuService } from '../../services/menu.service';
+import { NotificacionService } from '../../services/notificacion.service';
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss']
+  selector: 'app-notificacion',
+  templateUrl: './notificacion.page.html',
+  styleUrls: ['./notificacion.page.scss'],
 })
-export class Tab2Page implements OnInit {
+export class NotificacionPage implements OnInit {
 
-  menu:any = [];
+  notificaciones:any = [];
   cargando:boolean = false;
 
-  constructor( private menuService:MenuService,
+  constructor( private notificacionService:NotificacionService,
                private loadingService:LoadingService,
-               private router: Router ) {}
+               private router: Router ) { }
 
-  ngOnInit(){
+  ngOnInit() {
   }
   ionViewWillEnter(){
     this.loadingService.loadingPresent();
@@ -26,9 +26,9 @@ export class Tab2Page implements OnInit {
     this.instanciar();
   }
   instanciar(){
-    this.menuService.getMenu()
+    this.notificacionService.getNotificaciones()
     .subscribe( (resp:any)  => {
-      this.menu = resp.info;
+      this.notificaciones = resp.info.pushs;
     });
   }
   ionViewDidEnter() {

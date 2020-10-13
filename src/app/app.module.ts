@@ -17,6 +17,7 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { FCM } from "cordova-plugin-fcm-with-dependecy-updated/ionic/ngx";
+import { Device } from '@ionic-native/device/ngx';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { FCM } from "cordova-plugin-fcm-with-dependecy-updated/ionic/ngx";
     CallNumber,
     NativeStorage,
     Geolocation,
-    FCM
+    FCM,
+    Device
   ],
   bootstrap: [AppComponent]
 })
