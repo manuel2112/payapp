@@ -15,18 +15,12 @@ export class MapaPage implements OnInit {
   @Input() direccion;
   @Input() nmbEmpresa;
   zoom = 17;
-  cargando:boolean = false;
+  load:boolean = false;
   loadingMap:boolean = false;
   map:any;
   @ViewChild('map', { read: ElementRef,static: false}) mapRef: ElementRef;
   infoWindows:any = [];
-  markers: any = [
-    {
-      title: "papipa",
-      latitude: "-33.046768",
-      longitude: "-71.455231"
-    }
-  ];
+
 
   constructor( private modalCtrl:ModalController) { }
 
@@ -35,11 +29,19 @@ export class MapaPage implements OnInit {
       this.loadingMap = true;
       if (this.loadingMap == true) {
         this.showMap();
+        this.load = true;
       }
     },500);
   }
 
   showMap(){
+    const markers = [
+                        {
+                          title: this.nmbEmpresa,
+                          latitude: this.lat,
+                          longitude: this.lgt
+                        }
+                      ];
     const location = new google.maps.LatLng( this.lat, this.lgt);
     const options = {
       center: location,
@@ -47,7 +49,7 @@ export class MapaPage implements OnInit {
       disableDefaultUI: true
     };
     this.map = new google.maps.Map(this.mapRef.nativeElement, options);
-    this.addMarkersToMap(this.markers); 
+    this.addMarkersToMap(markers); 
   }
 
   addMarkersToMap( markers ){
@@ -61,7 +63,7 @@ export class MapaPage implements OnInit {
       })
       
       mapMarker.setMap(this.map);
-      this.addInfoWindowToMarker(mapMarker);
+      //this.addInfoWindowToMarker(mapMarker);
     }
   }
 

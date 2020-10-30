@@ -20,7 +20,6 @@ export class ShopPage implements OnInit {
   @Input() tipo:number;
   @Input() txtDelivery:string;
   @Input() tiempoEntrega:string;
-  cargando:boolean = false;
   propina:number = 0;
   total:number = 0;
   boolConfirma:boolean = false;
@@ -30,6 +29,7 @@ export class ShopPage implements OnInit {
   latitude:number = null;
   longitude:number = null;
   persona:any = [];
+  arraySk:any = Array(20);
 
   constructor( private modalCtrl:ModalController,
                private loadingService:LoadingService,
@@ -38,18 +38,15 @@ export class ShopPage implements OnInit {
                private storagePersonaService:StoragePersonaService,
                private geolocationService:GeolocationService) { }
 
-  ngOnInit() {
-    this.total = this.subTotal;
+  ngOnInit() {    
   }
 
   ionViewWillEnter(){
-    this.loadingService.loadingPresent();
-    this.cargando = false;
+    this.instanciar();
   }
 
-  ionViewDidEnter() {
-    this.cargando = true;
-    this.loadingService.loadingDismiss();
+  instanciar(){
+    this.total = this.subTotal;
   }
 
   propinaFn(total:number){
@@ -318,6 +315,10 @@ export class ShopPage implements OnInit {
 
   salir(){
     this.modalCtrl.dismiss();
+  }
+  refresh(ev){
+    this.instanciar();
+    ev.target.complete();
   }
 
 }

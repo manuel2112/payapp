@@ -2,11 +2,6 @@ ion-card {
     margin-bottom: 50px;
 }
 
-img.w100 {
-    width: 100%;
-    height: auto;
-}
-
 ion-slides {
     height: 350px;
 }
@@ -16,9 +11,14 @@ ion-slides {
 }
 
 .foto-card {
-    height: 190px;
-    background-color: white;
+    max-height: 190px;
     overflow: hidden;
+}
+
+.foto-card>ion-img {
+    max-height: auto;
+    max-width: 100%;
+    margin: 0 0;
 }
 
 h1 {

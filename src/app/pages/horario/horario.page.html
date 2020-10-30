@@ -1,5 +1,5 @@
 <ion-header [translucent]="true" no-border>
-    <ion-toolbar color="barra">
+    <ion-toolbar color="secondary">
 
         <ion-buttons slot="start">
             <ion-back-button defaultHref="/"></ion-back-button>
@@ -9,19 +9,37 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding color="empresa">
+<ion-content padding color="primary">
 
-    <ion-grid>
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
-        <ion-item *ngFor="let horario of horarios" color="empresa">
+    <div *ngIf=" !load ">
+        <ion-item *ngFor="let x of arraySk" color="primary">
             <ion-col>
-                {{ horario.HORARIO_DIA_OPEN | dia }}
+                <ion-skeleton-text animated style="width: 50%; height: 20px"></ion-skeleton-text>
             </ion-col>
             <ion-col>
-                {{ horario.HORARIO_HORA_OPEN | slice:0:5 }} - {{ horario.HORARIO_HORA_CLOSE | slice:0:5 }}
+                <ion-skeleton-text animated style="width: 60%; height: 20px"></ion-skeleton-text>
             </ion-col>
         </ion-item>
+    </div>
 
-    </ion-grid>
+    <div *ngIf=" load ">
+
+        <ion-grid>
+
+            <ion-item *ngFor="let horario of horarios" color="primary">
+                <ion-col>
+                    {{ horario.HORARIO_DIA_OPEN | dia }}
+                </ion-col>
+                <ion-col>
+                    {{ horario.HORARIO_HORA_OPEN | slice:0:5 }} - {{ horario.HORARIO_HORA_CLOSE | slice:0:5 }}
+                </ion-col>
+            </ion-item>
+
+        </ion-grid>
+    </div>
 
 </ion-content>

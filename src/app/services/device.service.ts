@@ -28,7 +28,7 @@ export class DeviceService {
 
     this.http.post(environment.URI + 'devicerest/', JSON.stringify(data), options)
     .subscribe((response) => {
-      console.log(response);               
+      //console.log(response);               
     });
 
   } 

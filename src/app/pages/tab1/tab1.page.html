@@ -1,94 +1,119 @@
 <ion-header [translucent]="true" no-border>
-    <ion-toolbar color="barra">
+    <ion-toolbar color="secondary">
         <ion-title slot="start">
             {{ empresa.EMPRESA_NOMBRE }}
         </ion-title>
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" *ngIf="cargando" color="empresa">
+<ion-content [fullscreen]="true" color="electriclime">
 
-    <div class="center">
-        <ion-img [src]="empresa.EMPRESA_LOGOTIPO | url"></ion-img>
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <div *ngIf=" !load ">
+        <ion-skeleton-text animated style="width: 100%; height: 200px"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 40px"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 200px"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 40px"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 200px"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 40px"></ion-skeleton-text>
     </div>
 
-    <ion-button color="success" expand="block" *ngIf="ABIERTO != 0" routerLink="/horario">ABIERTO HASTA LAS {{ horaCierre | slice:0:5 }} hrs.</ion-button>
-    <ion-button color="danger" expand="block" *ngIf="ABIERTO == 0" routerLink="/horario">CERRADO {{ timeBack }} para abrir.</ion-button>
+    <div *ngIf=" load ">
 
-    <h1 center>OFERTAS</h1>
+        <div class="center">
+            <ion-img [src]="empresa.EMPRESA_LOGOTIPO | url"></ion-img>
+        </div>
 
-    <ion-slides pager="true">
 
-        <ion-slide *ngFor="let oferta of ofertas">
+        <ion-button color="secondary" expand="block" *ngIf="open == 1 && horaCierre === undefined " routerLink="/horario">ABIERTO</ion-button>
+        <ion-button color="secondary" expand="block" *ngIf="open == 1 && horaCierre != undefined " routerLink="/horario">ABIERTO HASTA LAS {{ horaCierre | slice:0:5 }} hrs.</ion-button>
+        <ion-button color="tertiary" expand="block" *ngIf="open == 0 && timeBack == ''" routerLink="/horario">CERRADO</ion-button>
+        <ion-button color="tertiary" expand="block" *ngIf="open == 0 && timeBack != ''" routerLink="/horario">CERRADO {{ timeBack }} para abrir.</ion-button>
 
-            <ion-card (click)="detalle(oferta.oferta.PRODUCTO_ID);">
-                <div class="foto-card">
-                    <img *ngIf="oferta.oferta.PRODUCTO_IMG == null" [src]="empresa.EMPRESA_LOGOTIPO | url" class="w100" />
-                    <img *ngIf="oferta.oferta.PRODUCTO_IMG != null" [src]="oferta.oferta.PRODUCTO_IMG | url" class="w100" />
-                </div>
-                <ion-card-content>
-                    <ion-card-title>
-                        {{ oferta.oferta.PRODUCTO_NOMBRE}}
-                    </ion-card-title>
-                    <p>
-                        {{ oferta.oferta.PRODUCTO_DESC | truncar }}
-                    </p>
-                    <ion-button expand="full">{{ oferta.valor | peso }}</ion-button>
-                </ion-card-content>
-            </ion-card>
+        <div *ngIf=" ofertas != undefined ">
+            <h1 center>OFERTAS</h1>
 
-        </ion-slide>
+            <ion-slides pager="true">
 
-    </ion-slides>
+                <ion-slide *ngFor="let oferta of ofertas">
 
-    <h1>DESTACADOS</h1>
+                    <ion-card (click)="detalle(oferta.oferta.PRODUCTO_ID)" color="light">
+                        <div class="foto-card">
+                            <ion-img *ngIf="oferta.oferta.PRODUCTO_IMG == null" [src]="empresa.EMPRESA_LOGOTIPO | url" class="w100"></ion-img>
+                            <ion-img *ngIf="oferta.oferta.PRODUCTO_IMG != null" [src]="oferta.oferta.PRODUCTO_IMG | url" class="w100"></ion-img>
+                        </div>
+                        <ion-card-content>
+                            <ion-card-title>
+                                {{ oferta.oferta.PRODUCTO_NOMBRE}}
+                            </ion-card-title>
+                            <p>
+                                {{ oferta.oferta.PRODUCTO_DESC | truncar }}
+                            </p>
+                            <ion-button color="secondary" expand="full">{{ oferta.valor | peso }}</ion-button>
+                        </ion-card-content>
+                    </ion-card>
 
-    <ion-slides pager="true">
+                </ion-slide>
 
-        <ion-slide *ngFor="let dest of destacados">
+            </ion-slides>
+        </div>
 
-            <ion-card (click)="detalle(dest.destacado.PRODUCTO_ID);">
-                <img *ngIf="dest.destacado.PRODUCTO_IMG == null" [src]="empresa.EMPRESA_LOGOTIPO | url" class="w100" />
-                <img *ngIf="dest.destacado.PRODUCTO_IMG != null" [src]="dest.destacado.PRODUCTO_IMG | url" class="w100" />
-                <ion-card-content>
-                    <ion-card-title>
-                        DESC: {{ dest.destacado.PRODUCTO_NOMBRE }}
-                    </ion-card-title>
-                    <p>
-                        {{ dest.destacado.PRODUCTO_DESC }}
-                    </p>
-                    <ion-button expand="full">{{ dest.valor | peso }}</ion-button>
-                </ion-card-content>
-            </ion-card>
+        <div *ngIf=" destacados != undefined ">
+            <h1>DESTACADOS</h1>
 
-        </ion-slide>
-    </ion-slides>
+            <ion-slides pager="true">
 
-    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
-        <ion-fab-button>
-            <ion-icon name="add"></ion-icon>
-        </ion-fab-button>
-        <ion-fab-list side="top">
-            <ion-fab-button color="primary" *ngIf="empresa.EMPRESA_FACEBOOK" (click)="btnFacebook(empresa.EMPRESA_FACEBOOK)">
-                <ion-icon name="logo-facebook"></ion-icon>
+                <ion-slide *ngFor="let dest of destacados">
+
+                    <ion-card (click)="detalle(dest.destacado.PRODUCTO_ID);" color="light">
+                        <div class="foto-card">
+                            <ion-img *ngIf="dest.destacado.PRODUCTO_IMG == null" [src]="empresa.EMPRESA_LOGOTIPO | url" class="w100"></ion-img>
+                            <ion-img *ngIf="dest.destacado.PRODUCTO_IMG != null" [src]="dest.destacado.PRODUCTO_IMG | url" class="w100"></ion-img>
+                        </div>
+                        <ion-card-content>
+                            <ion-card-title>
+                                {{ dest.destacado.PRODUCTO_NOMBRE }}
+                            </ion-card-title>
+                            <p>
+                                {{ dest.destacado.PRODUCTO_DESC | truncar }}
+                            </p>
+                            <ion-button color="secondary" expand="full">{{ dest.valor | peso }}</ion-button>
+                        </ion-card-content>
+                    </ion-card>
+
+                </ion-slide>
+            </ion-slides>
+        </div>
+
+        <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+            <ion-fab-button color="secondary">
+                <ion-icon name="add"></ion-icon>
             </ion-fab-button>
-            <ion-fab-button color="instagram" *ngIf="empresa.EMPRESA_INSTAGRAM" (click)="btnInstagram(empresa.EMPRESA_INSTAGRAM)">
-                <ion-icon name="logo-instagram"></ion-icon>
-            </ion-fab-button>
-            <ion-fab-button color="web" *ngIf="empresa.EMPRESA_WEB" (click)="btnWeb(empresa.EMPRESA_WEB)">
-                <ion-icon name="globe-outline"></ion-icon>
-            </ion-fab-button>
-            <ion-fab-button color="whatsapp" *ngIf="empresa.EMPRESA_FONO" (click)="btnWhatsapp(empresa.EMPRESA_FONO)">
-                <ion-icon name="logo-whatsapp"></ion-icon>
-            </ion-fab-button>
-            <ion-fab-button color="phone" *ngIf="empresa.EMPRESA_FONO" (click)="btnFono(empresa.EMPRESA_FONO)">
-                <ion-icon name="call"></ion-icon>
-            </ion-fab-button>
-        </ion-fab-list>
-        <ion-fab-list side="start">
-            <ion-fab-button color="primary" routerLink="/nosotros">
-                <ion-icon name="information-outline"></ion-icon>
-            </ion-fab-button>
-        </ion-fab-list>
-    </ion-fab>
+            <ion-fab-list side="top">
+                <ion-fab-button color="primary" *ngIf="empresa.EMPRESA_FACEBOOK" (click)="btnFacebook(empresa.EMPRESA_FACEBOOK)">
+                    <ion-icon name="logo-facebook"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button color="instagram" *ngIf="empresa.EMPRESA_INSTAGRAM" (click)="btnInstagram(empresa.EMPRESA_INSTAGRAM)">
+                    <ion-icon name="logo-instagram"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button color="web" *ngIf="empresa.EMPRESA_WEB" (click)="btnWeb(empresa.EMPRESA_WEB)">
+                    <ion-icon name="globe-outline"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button color="whatsapp" *ngIf="empresa.EMPRESA_FONO" (click)="btnWhatsapp(empresa.EMPRESA_FONO)">
+                    <ion-icon name="logo-whatsapp"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button color="phone" *ngIf="empresa.EMPRESA_FONO" (click)="btnFono(empresa.EMPRESA_FONO)">
+                    <ion-icon name="call"></ion-icon>
+                </ion-fab-button>
+            </ion-fab-list>
+            <ion-fab-list side="start">
+                <ion-fab-button color="primary" routerLink="/nosotros">
+                    <ion-icon name="information-outline"></ion-icon>
+                </ion-fab-button>
+            </ion-fab-list>
+        </ion-fab>
+    </div>
 </ion-content>

@@ -1,5 +1,5 @@
 <ion-header [translucent]="true" no-border>
-    <ion-toolbar color="barra">
+    <ion-toolbar color="secondary">
 
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
@@ -9,7 +9,7 @@
 
         <ion-buttons slot="end">
             <ion-button id="cart-btn" (click)="irShop()">
-                <ion-badge *ngIf="countShop > 0">{{ countShop }}</ion-badge>
+                <ion-badge color="primary" *ngIf="countShop > 0">{{ countShop }}</ion-badge>
                 <ion-icon name="cart"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -18,57 +18,71 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" *ngIf="cargando" color="empresa">
+<ion-content [fullscreen]="true" color="primary">
 
-    <ion-slides [pager]="pager">
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
-        <ion-slide *ngIf="producto.PRODUCTO_IMG">
+    <div *ngIf=" !load ">
+        <ion-skeleton-text animated style="width: 100%; height: 200px"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%;" *ngFor="let x of arraySk"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 40px"></ion-skeleton-text>
+    </div>
 
-            <img [src]="producto.PRODUCTO_IMG | url" class="w100" (click)="abrirImagen(producto.PRODUCTO_IMG,producto.PRODUCTO_NOMBRE)" />
+    <div *ngIf=" load ">
 
-        </ion-slide>
+        <ion-slides [pager]="pager">
 
-        <ion-slide *ngFor="let imagen of imagenes">
+            <ion-slide *ngIf="producto.PRODUCTO_IMG">
 
-            <img [src]="imagen.IMAGEN_RUTA | url" class="w100" (click)="abrirImagen(imagen.IMAGEN_RUTA,producto.PRODUCTO_NOMBRE)" />
+                <img [src]="producto.PRODUCTO_IMG | url" class="w100" (click)="abrirImagen(producto.PRODUCTO_IMG,producto.PRODUCTO_NOMBRE)" />
 
-        </ion-slide>
+            </ion-slide>
 
-    </ion-slides>
+            <ion-slide *ngFor="let imagen of imagenes">
 
-    <p class="desc">{{ producto.PRODUCTO_DESC }}</p>
+                <img [src]="imagen.IMAGEN_RUTA | url" class="w100" (click)="abrirImagen(imagen.IMAGEN_RUTA,producto.PRODUCTO_NOMBRE)" />
 
-    <ion-row *ngFor="let precio of precios" color="empresa">
-        <ion-col size="8">
-            {{ precio.PROVAR_VALOR | peso }}
-            <span class="aviso" *ngIf="precio.PROVAR_STOCK == 0">SIN STOCK</span>
-            <span class="aviso" *ngIf="stock[precio.PROVAR_ID] > 0">STOCK MÁXIMO</span>
-            <br/> {{ precio.PROVAR_DESC }}
-        </ion-col>
-        <ion-col size="4" class="operador">
-            <ion-icon name="remove-outline" *ngIf="cantidad[precio.PROVAR_ID] > 0" (click)="restar(producto.PRODUCTO_NOMBRE , precio, cantidad[precio.PROVAR_ID], precio.PROVAR_STOCK)"></ion-icon>
-            <ion-icon name="remove-outline" *ngIf="!cantidad[precio.PROVAR_ID]"></ion-icon>
+            </ion-slide>
 
-            <span>{{ cantidad[precio.PROVAR_ID] }}</span>
+        </ion-slides>
 
-            <ion-icon name="add-outline" *ngIf="precio.PROVAR_STOCK == 0 || stock[precio.PROVAR_ID] > 0"></ion-icon>
-            <ion-icon name="add-outline" *ngIf="(precio.PROVAR_STOCK > 0) && (!stock[precio.PROVAR_ID]) || !precio.PROVAR_STOCK " (click)="sumar(producto.PRODUCTO_NOMBRE , precio, cantidad[precio.PROVAR_ID], precio.PROVAR_STOCK)"></ion-icon>
+        <h1>{{ producto.PRODUCTO_NOMBRE }}</h1>
+        <p class="desc">{{ producto.PRODUCTO_DESC }}</p>
 
-        </ion-col>
-    </ion-row>
+        <ion-row *ngFor="let precio of precios" color="empresa">
+            <ion-col size="8">
+                {{ precio.PROVAR_VALOR | peso }}
+                <span class="aviso" *ngIf="precio.PROVAR_STOCK == 0">SIN STOCK</span>
+                <span class="aviso" *ngIf="stock[precio.PROVAR_ID] > 0">STOCK MÁXIMO</span>
+                <br/> {{ precio.PROVAR_DESC }}
+            </ion-col>
+            <ion-col size="4" class="operador">
+                <ion-icon name="remove-outline" *ngIf="cantidad[precio.PROVAR_ID] > 0" (click)="restar(producto.PRODUCTO_NOMBRE , precio, cantidad[precio.PROVAR_ID], precio.PROVAR_STOCK)"></ion-icon>
+                <ion-icon name="remove-outline" *ngIf="!cantidad[precio.PROVAR_ID]"></ion-icon>
 
-    <ion-grid>
-        <ion-row>
-            <ion-col size="12">
-                <ion-button expand="block" color="danger" [disabled]="disabled" (click)="irShop()">Comprar</ion-button>
+                <span>{{ cantidad[precio.PROVAR_ID] }}</span>
+
+                <ion-icon name="add-outline" *ngIf="precio.PROVAR_STOCK == 0 || stock[precio.PROVAR_ID] > 0"></ion-icon>
+                <ion-icon name="add-outline" *ngIf="(precio.PROVAR_STOCK > 0) && (!stock[precio.PROVAR_ID]) || !precio.PROVAR_STOCK " (click)="sumar(producto.PRODUCTO_NOMBRE , precio, cantidad[precio.PROVAR_ID], precio.PROVAR_STOCK)"></ion-icon>
+
             </ion-col>
         </ion-row>
-        <ion-row>
-            <ion-col>
-                <ion-button expand="block" color="default" (click)="limpiarStorage()">LIMPIAR</ion-button>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+
+        <ion-grid>
+            <ion-row>
+                <ion-col size="12">
+                    <ion-button expand="block" color="secondary" [disabled]="disabled" (click)="irShop()">Comprar</ion-button>
+                </ion-col>
+            </ion-row>
+            <!-- <ion-row>
+                <ion-col>
+                    <ion-button expand="block" color="default" (click)="limpiarStorage()">LIMPIAR</ion-button>
+                </ion-col>
+            </ion-row> -->
+        </ion-grid>
+    </div>
 
 
 </ion-content>

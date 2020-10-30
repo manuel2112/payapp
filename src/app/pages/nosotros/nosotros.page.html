@@ -1,5 +1,5 @@
 <ion-header [translucent]="true" no-border>
-    <ion-toolbar color="barra">
+    <ion-toolbar color="secondary">
 
         <ion-buttons slot="start">
             <ion-back-button defaultHref="/"></ion-back-button>
@@ -9,38 +9,52 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="cargando" padding color="empresa">
+<ion-content padding color="primary">
 
-    <h1 class="ion-text-center">{{ empresa.EMPRESA_NOMBRE }}</h1>
-    <p class="txt-contenido">{{ empresa.EMPRESA_DESCRIPCION }}</p>
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
-    <h2 class="ion-text-center">SERVICIOS</h2>
-    <p class="txt-contenido" *ngFor="let negocio of tipoNegocio"><strong>{{ negocio.TIPO_NEGOCIO_NOMBRE }}</strong>: {{ negocio.EMPRESA_TIPO_NEGOCIO_OBS }}</p>
-
-    <div class="btns-center">
-        <ion-button color="primary" *ngIf="empresa.EMPRESA_FACEBOOK" (click)="btnFacebook(empresa.EMPRESA_FACEBOOK)">
-            <ion-icon name="logo-facebook"></ion-icon>
-        </ion-button>
-
-        <ion-button color="instagram" *ngIf="empresa.EMPRESA_INSTAGRAM" (click)="btnInstagram(empresa.EMPRESA_INSTAGRAM)">
-            <ion-icon name="logo-instagram"></ion-icon>
-        </ion-button>
-
-        <ion-button color="web" *ngIf="empresa.EMPRESA_WEB" (click)="btnWeb(empresa.EMPRESA_WEB)">
-            <ion-icon name="globe-outline"></ion-icon>
-        </ion-button>
-
-        <ion-button color="whatsapp" *ngIf="empresa.EMPRESA_FONO" (click)="btnWhatsapp(empresa.EMPRESA_FONO)">
-            <ion-icon name="logo-whatsapp"></ion-icon>
-        </ion-button>
-
-        <ion-button color="phone" *ngIf="empresa.EMPRESA_FONO" (click)="btnFono(empresa.EMPRESA_FONO)">
-            <ion-icon name="call"></ion-icon>
-        </ion-button>
-
-        <ion-button color="primary" *ngIf="empresa.EMPRESA_DIRECCION" (click)="abrirMapa()">
-            <ion-icon name="locate-outline"></ion-icon>
-        </ion-button>
+    <div *ngIf=" !load ">
+        <ion-skeleton-text animated style="width: 50%;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%" *ngFor="let x of arraySk"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 50%;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%" *ngFor="let x of arraySk"></ion-skeleton-text>
     </div>
 
+    <div *ngIf=" load ">
+
+        <h1 class="ion-text-center">{{ empresa.EMPRESA_NOMBRE }}</h1>
+        <p class="txt-contenido">{{ empresa.EMPRESA_DESCRIPCION }}</p>
+
+        <h2 class="ion-text-center">SERVICIOS</h2>
+        <p class="txt-contenido" *ngFor="let negocio of tipoNegocio"><strong>{{ negocio.TIPO_NEGOCIO_NOMBRE }}</strong>: {{ negocio.EMPRESA_TIPO_NEGOCIO_OBS }}</p>
+
+        <div class="btns-center">
+            <ion-button color="primary" *ngIf="empresa.EMPRESA_FACEBOOK" (click)="btnFacebook(empresa.EMPRESA_FACEBOOK)">
+                <ion-icon name="logo-facebook"></ion-icon>
+            </ion-button>
+
+            <ion-button color="instagram" *ngIf="empresa.EMPRESA_INSTAGRAM" (click)="btnInstagram(empresa.EMPRESA_INSTAGRAM)">
+                <ion-icon name="logo-instagram"></ion-icon>
+            </ion-button>
+
+            <ion-button color="web" *ngIf="empresa.EMPRESA_WEB" (click)="btnWeb(empresa.EMPRESA_WEB)">
+                <ion-icon name="globe-outline"></ion-icon>
+            </ion-button>
+
+            <ion-button color="whatsapp" *ngIf="empresa.EMPRESA_FONO" (click)="btnWhatsapp(empresa.EMPRESA_FONO)">
+                <ion-icon name="logo-whatsapp"></ion-icon>
+            </ion-button>
+
+            <ion-button color="phone" *ngIf="empresa.EMPRESA_FONO" (click)="btnFono(empresa.EMPRESA_FONO)">
+                <ion-icon name="call"></ion-icon>
+            </ion-button>
+
+            <ion-button color="primary" *ngIf="empresa.EMPRESA_DIRECCION" (click)="abrirMapa()">
+                <ion-icon name="locate-outline"></ion-icon>
+            </ion-button>
+        </div>
+
+    </div>
 </ion-content>

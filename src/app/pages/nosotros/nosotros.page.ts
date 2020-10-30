@@ -4,7 +4,6 @@ import { ModalController } from '@ionic/angular';
 import { MapaPage } from '../mapa/mapa.page';
 import { EmpresaService } from '../../services/empresa.service';
 import { SocialService } from '../../services/social.service';
-import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-nosotros',
@@ -18,23 +17,24 @@ export class NosotrosPage implements OnInit {
   LONGITUD  = '';
   DIRECCION  = '';
   empresa:any = [];
+  load:boolean = false;
   tipoNegocio:any = [];
-  cargando:boolean = false;
+  arraySk:any = Array(20);
 
   constructor(  private empresaService:EmpresaService,
                 private modalCtrl:ModalController,
-                private loadingService:LoadingService,
                 private socialService:SocialService) { }           
 
   ngOnInit() {
   }
   ionViewWillEnter(){
-    this.loadingService.loadingPresent();
-    this.cargando = false;
     this.instanciar();
   }
-
   instanciar(){
+    this.load = false;
+    this.getEmpresa();
+  }
+  getEmpresa(){
     this.empresaService.getTopDatos()
     .subscribe( (resp:any)  => {
       this.empresa = resp.info.empresa;
@@ -43,12 +43,8 @@ export class NosotrosPage implements OnInit {
       this.LONGITUD = resp.info.empresa.EMPRESA_LONG;
       this.DIRECCION = resp.info.empresa.EMPRESA_DIRECCION +', '+ resp.info.empresa.CIUDAD_NOMBRE;
       this.tipoNegocio = resp.info.tipoNegocio;
+      this.load = !(resp.error);
     });
-  }
-
-  ionViewDidEnter() {
-    this.loadingService.loadingDismiss();
-    this.cargando = true;
   }
 
   async abrirMapa(){
@@ -63,6 +59,10 @@ export class NosotrosPage implements OnInit {
         }
       });
       await modal.present();
+  }
+  refresh(ev){
+    this.instanciar();
+    ev.target.complete();
   }
 
   /******************************/

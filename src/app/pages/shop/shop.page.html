@@ -1,86 +1,97 @@
 <ion-header [translucent]="true" no-border>
-    <ion-toolbar color="barra">
+    <ion-toolbar color="secondary">
 
         <ion-title>COMPRAR</ion-title>
 
-        <ion-button color="dark" slot=end (click)="salir()">
+        <ion-button color="secondary" class="noborder" slot=end (click)="salir()">
             <ion-icon name="close-outline"></ion-icon>
         </ion-button>
 
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" *ngIf="cargando" color="empresa">
+<ion-content [fullscreen]="true" color="primary">
 
-    <ion-grid>
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <div *ngIf=" !total ">
+        <ion-skeleton-text animated style="width: 100%; height: 40px" *ngFor="let x of arraySk"></ion-skeleton-text>
+    </div>
+
+    <div *ngIf=" total ">
+
+        <ion-grid>
+            <ion-row>
+                <ion-col size="6">
+                    ¿Quieres dar propina?
+                </ion-col>
+                <ion-col size="6">
+                    <ion-segment mode="ios">
+                        <ion-segment-button value="1" (click)="darPropina(1)">
+                            <ion-label>SI</ion-label>
+                        </ion-segment-button>
+                        <ion-segment-button value="2" (click)="darPropina(0)">
+                            <ion-label>NO</ion-label>
+                        </ion-segment-button>
+                    </ion-segment>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+        <!-- PROPINA -->
+        <ion-item color="secondary">
+            <ion-label>
+                Propina:
+            </ion-label>
+            <span slot="end">
+                {{ propina | peso }}
+            </span>
+        </ion-item>
+
+        <!-- SUBTOTAL -->
+        <ion-item color="secondary">
+            <ion-label>
+                Sub-total:
+            </ion-label>
+            <span slot="end">
+                {{ subTotal | peso }}
+            </span>
+        </ion-item>
+
+        <!-- TOTAL -->
+        <ion-item color="secondary">
+            <ion-label>
+                Total:
+            </ion-label>
+            <span slot="end">
+                {{ total | peso }}
+            </span>
+        </ion-item>
+
         <ion-row>
-            <ion-col size="6">
-                ¿Quieres dar propina?
-            </ion-col>
-            <ion-col size="6">
-                <ion-segment mode="ios">
-                    <ion-segment-button value="1" (click)="darPropina(1)">
-                        <ion-label>SI</ion-label>
-                    </ion-segment-button>
-                    <ion-segment-button value="2" (click)="darPropina(0)">
-                        <ion-label>NO</ion-label>
-                    </ion-segment-button>
-                </ion-segment>
+            <ion-col size="12">
+                <ion-button color="tertiary" expand="block" (click)="datosAlertPrompt()">INGRESA TUS DATOS AQUÍ</ion-button>
             </ion-col>
         </ion-row>
-    </ion-grid>
 
-    <!-- PROPINA -->
-    <ion-item color="barra">
-        <ion-label>
-            Propina:
-        </ion-label>
-        <span slot="end">
-            {{ propina | peso }}
-        </span>
-    </ion-item>
+        <ion-list *ngIf="boolConfirma && tipo == 1">
+            <ion-item color="tertiary">
+                <ion-button color="primary" expand="block" class="obj-center" (click)="areaReparto()">VER ÁREAS DE REPARTO AQUÍ</ion-button>
+            </ion-item>
+            <ion-item color="tertiary">
+                <ion-label>Confirmo que vivo dentro de las áreas<br> de reparto</ion-label>
+                <ion-checkbox slot="end" (ionChange)="confirmarArea($event)"></ion-checkbox>
+            </ion-item>
+        </ion-list>
 
-    <!-- SUBTOTAL -->
-    <ion-item color="barra">
-        <ion-label>
-            Sub-total:
-        </ion-label>
-        <span slot="end">
-            {{ subTotal | peso }}
-        </span>
-    </ion-item>
-
-    <!-- TOTAL -->
-    <ion-item color="barra">
-        <ion-label>
-            Total:
-        </ion-label>
-        <span slot="end">
-            {{ total | peso }}
-        </span>
-    </ion-item>
-
-    <ion-row>
-        <ion-col size="12">
-            <ion-button color="warning" expand="block" (click)="datosAlertPrompt()">INGRESA TUS DATOS AQUÍ</ion-button>
-        </ion-col>
-    </ion-row>
-
-    <ion-list *ngIf="boolConfirma && tipo == 1">
-        <ion-item color="barra">
-            <ion-button color="primary" expand="block" class="obj-center" (click)="areaReparto()">VER ÁREAS DE REPARTO AQUÍ</ion-button>
-        </ion-item>
-        <ion-item color="barra">
-            <ion-label>Confirmo que vivo dentro de las áreas<br> de reparto</ion-label>
-            <ion-checkbox slot="end" (ionChange)="confirmarArea($event)"></ion-checkbox>
-        </ion-item>
-    </ion-list>
-
-    <ion-row>
-        <ion-col size="12">
-            <p class="tiempo">{{ tiempoEntrega }}</p>
-            <ion-button color="success" expand="block" (click)="pagar()">REALIZAR PAGO</ion-button>
-        </ion-col>
-    </ion-row>
+        <ion-row>
+            <ion-col size="12">
+                <p class="tiempo">{{ tiempoEntrega }}</p>
+                <ion-button color="secondary " expand="block " (click)="pagar() ">REALIZAR PAGO</ion-button>
+            </ion-col>
+        </ion-row>
+    </div>
 
 </ion-content>

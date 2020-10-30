@@ -46,3 +46,25 @@ img.w100 {
 .obj-center {
     margin: 0 auto;
 }
+
+ion-skeleton-text {
+    --background-rgb: var(-–ion-color-btnprimary);
+}
+
+.gm-style .gm-style-iw {
+    color: #000 !important;
+}
+
+ion-button.noborder {
+    --box-shadow: 0;
+}
+
+.swiper-pagination-bullet {
+    background: white;
+    opacity: 0.2;
+}
+
+.swiper-pagination-bullet-active {
+    opacity: 0.9;
+    background: white;
+}

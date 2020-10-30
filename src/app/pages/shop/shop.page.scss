@@ -14,6 +14,10 @@ ion-segment-button {
 
 p.tiempo {
     text-align: center;
-    color: var(--ion-color-warning);
     font-weight: bold;
+}
+
+.list-md {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
 }

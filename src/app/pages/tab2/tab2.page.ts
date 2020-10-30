@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { LoadingService } from '../../services/loading.service';
 import { MenuService } from '../../services/menu.service';
 
 @Component({
@@ -12,31 +11,34 @@ import { MenuService } from '../../services/menu.service';
 export class Tab2Page implements OnInit {
 
   menu:any = [];
-  cargando:boolean = false;
+  load:boolean = false;
+  arraySk:any = Array(20);
 
   constructor( private menuService:MenuService,
-               private loadingService:LoadingService,
                private router: Router ) {}
 
   ngOnInit(){
   }
   ionViewWillEnter(){
-    this.loadingService.loadingPresent();
-    this.cargando = false;
     this.instanciar();
   }
   instanciar(){
+    this.load = false;
+    this.getMenu();
+  }
+  getMenu(){
     this.menuService.getMenu()
     .subscribe( (resp:any)  => {
       this.menu = resp.info;
+      this.load = !(resp.error);
     });
-  }
-  ionViewDidEnter() {
-    this.loadingService.loadingDismiss();
-    this.cargando = true;
   }
   detalle(id:number){    
     this.router.navigate(['/producto',{ id: id }]);
+  }
+  refresh(ev){
+    this.instanciar();
+    ev.target.complete();
   }
 
 }

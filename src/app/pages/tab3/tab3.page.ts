@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TabsPage } from '../tabs/tabs.page'
 import { AlertController, ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -9,16 +9,17 @@ import { LoadingService } from '../../services/loading.service';
 import { ToastService } from '../../services/toast.service';
 import { StorageService } from '../../services/storage.service';
 import { EmpresaService } from '../../services/empresa.service';
+import { AperturaService } from '../../services/apertura.service';
 
 @Component({
   selector: 'app-tab3',
   templateUrl: 'tab3.page.html',
   styleUrls: ['tab3.page.scss']
 })
-export class Tab3Page {
+export class Tab3Page implements OnInit {
 
-  productos:[] = [];
-  cargando:boolean = false;
+  productos:any = [];
+  load:boolean = false;
   totalProductos:number = 0;
   boolObs:boolean = false;
   txtObs:string = '';
@@ -27,6 +28,9 @@ export class Tab3Page {
   boolDelivery:boolean = false;
   counterNegocio:number = 0;
   tiempoEntrega:string = '';
+  arraySk:any = Array(20);
+  open  = 0;
+  timeBack:string = '';
 
   constructor( private loadingService:LoadingService,
                private storageService:StorageService,
@@ -35,23 +39,44 @@ export class Tab3Page {
                private alertController: AlertController,
                private modalCtrl:ModalController,
                private router: Router,
-               private empresaService:EmpresaService ) {}
+               private empresaService:EmpresaService,
+               private aperturaService:AperturaService ) {}
+
+  ngOnInit(){
+    this.aperturaService.updateHorario();
+    this.updateHorarioTimer();
+  }
 
   ionViewWillEnter(){
-    this.loadingService.loadingPresent();
-    this.cargando = false;
     this.instanciar();
   }
 
   instanciar(){
+    this.load = false;
     this.cargarProductos();
+    this.delivery();
+  }
+
+  updateHorarioTimer() {
+    setInterval(() => {
+      // this.aperturaService.enCurso = false;
+      this.aperturaService.updateHorario();
+    }, 60000);
+    setInterval(() => {
+      this.load = this.aperturaService.load;
+      this.timeBack = this.aperturaService.timeBack;
+      this.open = this.aperturaService.open;
+    }, 1000);
+  }
+  
+  delivery(){
     this.empresaService.delivery()
     .subscribe( (resp:any)  => {
       if( !resp.error ){
-        this.txtDelivery = resp.info.existeDelivery ? resp.info.delivery.EMPRESA_TIPO_NEGOCIO_OBS : '';
-        this.boolDelivery = resp.info.existeDelivery;
-        this.counterNegocio = resp.info.counterTipos;
-        this.tiempoEntrega = resp.info.tiempoEntrega.EMPRESA_T_ENTREGA;
+          this.txtDelivery = resp.info.existeDelivery ? resp.info.delivery.EMPRESA_TIPO_NEGOCIO_OBS : '';
+          this.boolDelivery = resp.info.existeDelivery;
+          this.counterNegocio = resp.info.counterTipos;
+          this.tiempoEntrega = resp.info.tiempoEntrega.EMPRESA_T_ENTREGA;
         if( this.boolDelivery && this.counterNegocio == 1){
           this.tipoEntrega = 1;
         }
@@ -60,9 +85,7 @@ export class Tab3Page {
         }
       }
     });
-    this.cargando = true;
   }
-
   ionViewDidEnter() {
     this.loadingService.loadingDismiss();
   }
@@ -74,32 +97,26 @@ export class Tab3Page {
   }
 
   eliminarVarPro(idVarPro:number){
-    this.loadingService.loadingPresent(); 
-    this.cargando = false;   
+    this.loadingService.loadingPresent();
     this.storageService.borrar(idVarPro);
     this.cargarProductos();
     this.tabspage.counterShop();
-    this.cargando = true;
     this.loadingService.loadingDismiss();
     this.toastService.presentToast('Producto eliminado');
   }
 
   restar(nmbPro:string, varPro:any, cantidad:number){
     this.loadingService.loadingPresent();
-    this.cargando = false;
     cantidad--;
     this.storageService.insertStorage(nmbPro, varPro, cantidad);
     this.cargarProductos();
-    this.cargando = true;
     this.loadingService.loadingDismiss();
   }
   sumar(nmbPro:string, varPro:any, cantidad:number){
     this.loadingService.loadingPresent();
-    this.cargando = false;
     cantidad++;
     this.storageService.insertStorage(nmbPro, varPro, cantidad);
     this.cargarProductos();
-    this.cargando = true;
     this.loadingService.loadingDismiss();
   }
 
@@ -174,6 +191,10 @@ export class Tab3Page {
 
   clcEntrega(valor:number){
     this.tipoEntrega = valor;
+  }
+  refresh(ev){
+    this.instanciar();
+    ev.target.complete();
   }
 
 }

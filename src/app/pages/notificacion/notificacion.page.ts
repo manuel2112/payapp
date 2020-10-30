@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { LoadingService } from '../../services/loading.service';
 import { NotificacionService } from '../../services/notificacion.service';
 
 @Component({
@@ -12,31 +11,34 @@ import { NotificacionService } from '../../services/notificacion.service';
 export class NotificacionPage implements OnInit {
 
   notificaciones:any = [];
-  cargando:boolean = false;
+  load:boolean = false;
+  arraySk:any = Array(20);
 
   constructor( private notificacionService:NotificacionService,
-               private loadingService:LoadingService,
                private router: Router ) { }
 
   ngOnInit() {
   }
   ionViewWillEnter(){
-    this.loadingService.loadingPresent();
-    this.cargando = false;
     this.instanciar();
   }
   instanciar(){
+    this.load = false;
+    this.getNotificaciones();
+  }
+  getNotificaciones(){
     this.notificacionService.getNotificaciones()
     .subscribe( (resp:any)  => {
       this.notificaciones = resp.info.pushs;
+      this.load = !(resp.error);
     });
-  }
-  ionViewDidEnter() {
-    this.loadingService.loadingDismiss();
-    this.cargando = true;
   }
   detalle(id:number){    
     this.router.navigate(['/producto',{ id: id }]);
+  }
+  refresh(ev){
+    this.instanciar();
+    ev.target.complete();
   }
 
 }

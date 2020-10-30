@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AlertController, Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
 
 import { DeviceService } from '../services/device.service';
 
@@ -13,7 +14,8 @@ export class PushService {
   constructor( private platform: Platform, 
                private fcm: FCM,
                private deviceService:DeviceService,
-               private alertController: AlertController ) { }
+               private alertController: AlertController,
+               private router: Router ) { }
 
   initPushNotification() {
 
@@ -24,20 +26,15 @@ export class PushService {
     this.fcm.subscribeToTopic('people');
 
     this.fcm.getToken().then(token => {
-      //console.log('token: ',token);
       this.deviceService.insertDevice(token);
     });
 
     this.fcm.onNotification().subscribe(data => {
       console.log(data);
       if (data.wasTapped) {
-        console.log('Received in background x');
-        // this.router.navigate([data.landing_page, data.price]);
-        // aqui direcciono el push
+        this.detalle(data.idProducto);
       } else {
-        console.log('Received in foreground y');
-        // this.router.navigate([data.landing_page, data.price]);
-        this.showPush(data.title, data.body);
+        this.showPush(data.title, data.body, data.idProducto);
       }
     });
 
@@ -45,29 +42,37 @@ export class PushService {
       console.log(token);
     });
     // this.fcm.unsubscribeFromTopic('marketing');
-    }
+  }
 
-    async showPush(title:string, body:string) {
+    async showPush(title:string, body:string, idProducto:any) {
       const alert = await this.alertController.create({
         header: title,
         message: body,
         buttons: [
           {
-            text: 'Cancel',
+            text: 'Cancelar',
             role: 'cancel',
             cssClass: 'secondary',
             handler: (blah) => {
-              console.log('Confirm Cancel: blah');
+              //console.log('Confirm Cancel: blah');
             }
           }, {
-            text: 'Okay',
+            text: 'VER',
             handler: () => {
-              console.log('Confirm Okay');
+              this.detalle(idProducto);
             }
           }
         ]
       });
   
       await alert.present();
+    }
+
+    detalle(id:any){
+      if( id != '' ){
+        this.router.navigate(['/producto',{ id: id }]);
+      }else{
+        this.router.navigate(['/notificacion']);
+      }      
     }
 }

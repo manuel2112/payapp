@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { ZoomImagenPage  } from '../zoom-imagen/zoom-imagen.page';
 
-import { LoadingService } from '../../services/loading.service';
 import { MenuService } from '../../services/menu.service';
 import { StorageService } from '../../services/storage.service';
 
@@ -15,47 +14,44 @@ import { StorageService } from '../../services/storage.service';
 export class ProductoPage implements OnInit {
 
   id: any;
-  cargando:boolean = false;
   pager:boolean = false;
   disabled:boolean = true;
   stock:any = [] ;
   producto:any = [];
+  load:boolean = false;
   precios:any = [];
   imagenes:any = [];
   countShop:number = 0 ;
   cantidad:any = [] ;
+  arraySk:any = Array(20);
 
   constructor( private route: ActivatedRoute,
                private router: Router,
                private menuService:MenuService,
-               private loadingService:LoadingService,
                private modalCtrl:ModalController,
                private storageService:StorageService) {}
 
   ionViewWillEnter(){
-    this.loadingService.loadingPresent();
-    this.cargando = false;
     this.instanciar();
   }
   instanciar(){
+    this.load = false;
     this.id = this.route.snapshot.paramMap.get('id');
+    this.getProducto(this.id);
+    // this.pager = this.imagenes.length > 0 ? true : false;
+    this.storageService.getStorage();
+    this.countShop = this.storageService.countProductos();
+  }
+  getProducto(id:number){
     this.menuService.getProducto(this.id)
     .subscribe( (resp:any)  => {
       this.producto = resp.info.producto;
       this.precios = resp.info.precios; 
       this.existeProducto(this.precios); 
       this.imagenes = resp.info.imagenes;
-      this.pager = this.imagenes.length > 0 ? true : false; 
-      this.cargando = true;
-      this.loadingService.loadingDismiss();
+      this.pager = this.imagenes.length > 0 ? true : false;
+      this.load = !(resp.error);
     });
-    // this.pager = this.imagenes.length > 0 ? true : false;
-    this.storageService.getStorage();
-    this.countShop = this.storageService.countProductos();
-  }
-  ionViewDidEnter() {
-    this.loadingService.loadingDismiss();
-    this.cargando = true;
   }
   ngOnInit() {
   }
@@ -141,6 +137,10 @@ export class ProductoPage implements OnInit {
     this.countShop = 0;
     this.disabled = true;
     console.log('LIMPIO');
+  }
+  refresh(ev){
+    this.instanciar();
+    ev.target.complete();
   }
 
 }
