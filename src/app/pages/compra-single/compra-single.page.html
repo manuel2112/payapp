@@ -1,0 +1,110 @@
+<ion-header [translucent]="true" no-border>
+    <ion-toolbar [color]="colorsegundo">
+
+        <ion-title>DETALLE COMPRA</ion-title>
+
+        <ion-button [color]="colorsegundo" class="noborder" slot=end (click)="salir()">
+            <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [color]="colorprimero">
+
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <div *ngIf=" !load ">
+        <ion-skeleton-text animated style="width: 100%; height: 40px" *ngFor="let x of arraySk"></ion-skeleton-text>
+    </div>
+
+    <div *ngIf=" load " class="ion-margin-top">
+
+        <ion-grid [style]="styleBorder">
+            <ion-row>
+                <ion-col size="6">
+                    ORDEN DE COMPRA
+                </ion-col>
+                <ion-col size="6" class="ion-text-right">
+                    {{ buyOrder }}
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <ion-grid [style]="styleBorder">
+            <ion-row>
+                <ion-col size="6">
+                    FECHA
+                </ion-col>
+                <ion-col size="6" class="ion-text-right">
+                    {{ fecha }}
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <ion-grid [style]="styleBorder">
+            <ion-row>
+                <ion-col size="6">
+                    TIPO DE ENTREGA
+                </ion-col>
+                <ion-col size="6" class="ion-text-right">
+                    {{ tipoNegocio | tipoNegocio }}
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <ion-grid [style]="styleBorder" *ngIf=" propina > 0 ">
+            <ion-row>
+                <ion-col size="6">
+                    PROPINA
+                </ion-col>
+                <ion-col size="6" class="ion-text-right">
+                    {{ propina | peso }}
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <ion-grid [style]="styleBorder" *ngIf=" delivery ">
+            <ion-row>
+                <ion-col size="6">
+                    DELIVERY
+                </ion-col>
+                <ion-col size="6" class="ion-text-right">
+                    {{ delivery | peso }}
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+        <ion-grid [style]="styleBorder" *ngFor="let detalle of detalles">
+            <ion-row>
+                <ion-col size="12">
+                    {{ detalle.PRODUCTO_NOMBRE }} - {{ detalle.PROVAR_DESC }}
+                </ion-col>
+            </ion-row>
+            <ion-row>
+                <ion-col size="4">
+                    {{ detalle.PEDIDO_DETALLE_UNIDAD | peso }}
+                </ion-col>
+                <ion-col size="4" class="ion-text-center">
+                    {{ detalle.PEDIDO_DETALLE_CANT }}
+                </ion-col>
+                <ion-col size="4" class="ion-text-right">
+                    {{ detalle.PEDIDO_DETALLE_TOTAL | peso }}
+                </ion-col>
+            </ion-row>
+            <ion-col size="12" *ngIf=" detalle.PEDIDO_DETALLE_OBS ">
+                {{ detalle.PEDIDO_DETALLE_OBS }}
+            </ion-col>
+        </ion-grid>
+
+        <ion-grid [style]="styleBorder">
+            <ion-row>
+                <ion-col size="6">
+                    TOTAL
+                </ion-col>
+                <ion-col size="6" class="ion-text-right">
+                    {{ total | peso }}
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+
+</ion-content>

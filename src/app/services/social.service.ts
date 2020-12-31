@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-
+import { Platform } from '@ionic/angular';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser/ngx';
-import { CallNumber } from '@ionic-native/call-number/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -9,32 +8,34 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
 export class SocialService {
 
   options : InAppBrowserOptions = {
-    location : 'yes',//Or 'no' 
+    location : 'yes',//Or 'no'
     hidden : 'no', //Or  'yes'
     clearcache : 'yes',
     clearsessioncache : 'yes',
-    zoom : 'yes',//Android only ,shows browser zoom controls 
+    zoom : 'no',//Android only ,shows browser zoom controls
     hardwareback : 'yes',
     mediaPlaybackRequiresUserAction : 'no',
     shouldPauseOnSuspend : 'no', //Android only 
     closebuttoncaption : 'X', //iOS only
     disallowoverscroll : 'no', //iOS only 
-    toolbar : 'yes', //iOS only 
+    toolbar : 'no', //iOS only 
     enableViewportScale : 'no', //iOS only 
     allowInlineMediaPlayback : 'no',//iOS only 
     presentationstyle : 'pagesheet',//iOS only 
-    fullscreen : 'yes',//Windows only    
+    fullscreen : 'no',//Windows only    
+    hideurlbar : 'yes',//Windows only    
 };
+urlSuccessPage:string = "https://www.localfood.cl/app/index.php/paymall/exito";
 
   constructor( private iab: InAppBrowser,
-               private callNumber: CallNumber ) { }
+               private platform: Platform ) { }
 
   facebook(url:string){
-    let target = "_blank";
+    let target = "_system";
     this.iab.create(url,target,this.options);
   }
   instagram(url:string){
-    let target = "_blank";
+    let target = "_system";
     this.iab.create(url,target,this.options);
   }
   web(url:string){
@@ -48,8 +49,19 @@ export class SocialService {
   fono(number:string){
     let target = "_system";
     this.iab.create(`tel:${ number }`,target);
-    // this.callNumber.callNumber(number, true)
-    // .then(res => console.log('Launched dialer!', res))
-    // .catch(err => console.log('Error launching dialer', err));
   }
+
+  webpay(url:string) {
+    var browser = this.iab.create(url, '_blank', 'clearcache=yes,clearsessioncache=yes,location=yes,hardwareback=no,zoom=no');
+
+    if( this.platform.is('cordova') ){
+      browser.on('loadstart').subscribe((e) => {
+        if ( e.url == this.urlSuccessPage ) {
+          browser.close();
+        }
+      });
+    }
+    
+  }
+
 }

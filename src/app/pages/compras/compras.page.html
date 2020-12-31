@@ -1,0 +1,61 @@
+<ion-header [translucent]="true" no-border>
+    <ion-toolbar [color]="colorsegundo">
+
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/"></ion-back-button>
+        </ion-buttons>
+        <ion-title>MIS COMPRAS</ion-title>
+
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding [color]="colorprimero">
+
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <div *ngIf=" !load ">
+        <ion-item *ngFor="let x of arraySk" [color]="colorprimero">
+            <ion-col>
+                <ion-skeleton-text animated style="width: 95%; height: 20px"></ion-skeleton-text>
+            </ion-col>
+            <ion-col>
+                <ion-skeleton-text animated style="width: 95%; height: 20px"></ion-skeleton-text>
+            </ion-col>
+            <ion-col>
+                <ion-skeleton-text animated style="width: 95%; height: 20px"></ion-skeleton-text>
+            </ion-col>
+        </ion-item>
+    </div>
+
+    <div *ngIf=" load ">
+
+        <div class="ion-text-center" *ngIf=" sinCompras ">
+            <h5>AÚN NO HAS REALIZADO COMPRAS</h5>
+        </div>
+
+        <ion-grid>
+
+            <ion-item [color]="colorprimero" [style]="styleBorder" *ngIf=" !sinCompras ">
+                <ion-col>
+                    N° PEDIDO
+                </ion-col>
+                <ion-col>
+                    FECHA
+                </ion-col>
+            </ion-item>
+
+            <ion-item *ngFor="let compra of compras" [color]="colorprimero" [style]="styleBorder" button detail (click)="detalleCompra( compra.PEDIDO_HASH )">
+                <ion-col>
+                    {{ compra.PEDIDO_ORDEN }}
+                </ion-col>
+                <ion-col>
+                    {{ compra.PEDIDO_FECHA | date }}
+                </ion-col>
+            </ion-item>
+
+        </ion-grid>
+    </div>
+
+</ion-content>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MenuService } from '../../services/menu.service';
+import { ColoresService } from '../../services/colores.service';
 
 @Component({
   selector: 'app-tab2',
@@ -13,11 +14,15 @@ export class Tab2Page implements OnInit {
   menu:any = [];
   load:boolean = false;
   arraySk:any = Array(20);
+  colorprimero:string = '';
+  colorsegundo:string = '';
 
   constructor( private menuService:MenuService,
-               private router: Router ) {}
+               private router: Router, 
+               private coloresService:ColoresService ) {}
 
   ngOnInit(){
+    this.getColores();
   }
   ionViewWillEnter(){
     this.instanciar();
@@ -25,6 +30,10 @@ export class Tab2Page implements OnInit {
   instanciar(){
     this.load = false;
     this.getMenu();
+  }
+  getColores(){
+    this.colorprimero = this.coloresService.colorprimero;
+    this.colorsegundo = this.coloresService.colorsegundo;
   }
   getMenu(){
     this.menuService.getMenu()

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
 import { HorarioService } from '../../services/horario.service';
+import { ColoresService } from '../../services/colores.service';
 
 @Component({
   selector: 'app-horario',
@@ -11,11 +13,16 @@ export class HorarioPage implements OnInit {
   horarios:any = [];
   load:boolean = false;
   arraySk:any = Array(20);
+  colorprimero:string = '';
+  colorsegundo:string = '';
+  styleBorder:string = '';
 
-  constructor( private _shorario:HorarioService ) {
+  constructor( private _shorario:HorarioService, 
+               private coloresService:ColoresService ) {
   }
 
   ngOnInit() {
+    this.getColores();
   }
   ionViewWillEnter(){
     this.instanciar();
@@ -23,6 +30,11 @@ export class HorarioPage implements OnInit {
   instanciar(){
     this.load = false;
     this.getHorario();
+    this.styleBorder = `border-bottom: 1px solid var(--ion-color-${ this.colorsegundo })`;
+  }
+  getColores(){
+    this.colorprimero = this.coloresService.colorprimero;
+    this.colorsegundo = this.coloresService.colorsegundo;
   }
   getHorario(){
     this._shorario.getDatos()

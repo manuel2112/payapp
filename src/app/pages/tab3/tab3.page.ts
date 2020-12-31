@@ -8,8 +8,9 @@ import { ShopPage } from '../shop/shop.page';
 import { LoadingService } from '../../services/loading.service';
 import { ToastService } from '../../services/toast.service';
 import { StorageService } from '../../services/storage.service';
-import { EmpresaService } from '../../services/empresa.service';
+import { TipoNegocioService } from '../../services/tipo-negocio.service';
 import { AperturaService } from '../../services/apertura.service';
+import { ColoresService } from '../../services/colores.service';
 
 @Component({
   selector: 'app-tab3',
@@ -21,16 +22,16 @@ export class Tab3Page implements OnInit {
   productos:any = [];
   load:boolean = false;
   totalProductos:number = 0;
-  boolObs:boolean = false;
   txtObs:string = '';
-  tipoEntrega:number = 0;//1=DELIVERY,2=RETIRO EN LOCAL
-  txtDelivery:string = '';
-  boolDelivery:boolean = false;
-  counterNegocio:number = 0;
-  tiempoEntrega:string = '';
+  tipoEntrega:number = 0;
   arraySk:any = Array(20);
   open  = 0;
   timeBack:string = '';
+  colorprimero:string = '';
+  colorsegundo:string = '';
+  colortercero:string = '';
+  styleBorder:string = '';
+  tipoNegocio:any = [];
 
   constructor( private loadingService:LoadingService,
                private storageService:StorageService,
@@ -39,27 +40,33 @@ export class Tab3Page implements OnInit {
                private alertController: AlertController,
                private modalCtrl:ModalController,
                private router: Router,
-               private empresaService:EmpresaService,
-               private aperturaService:AperturaService ) {}
+               private aperturaService:AperturaService,
+               private coloresService:ColoresService, 
+               private tipoNegocioService:TipoNegocioService ) {}
 
   ngOnInit(){
     this.aperturaService.updateHorario();
     this.updateHorarioTimer();
   }
-
   ionViewWillEnter(){
     this.instanciar();
   }
-
   instanciar(){
     this.load = false;
+    this.tipoEntrega = 0;
+    this.getColores();
+    this.styleBorder = `border-bottom: 1px solid var(--ion-color-${ this.colorsegundo })`;
     this.cargarProductos();
-    this.delivery();
+    this.getTipoNegocio();
+  }
+  getColores(){
+    this.colorprimero = this.coloresService.colorprimero;
+    this.colorsegundo = this.coloresService.colorsegundo;
+    this.colortercero = this.coloresService.colortercero;
   }
 
   updateHorarioTimer() {
     setInterval(() => {
-      // this.aperturaService.enCurso = false;
       this.aperturaService.updateHorario();
     }, 60000);
     setInterval(() => {
@@ -68,22 +75,10 @@ export class Tab3Page implements OnInit {
       this.open = this.aperturaService.open;
     }, 1000);
   }
-  
-  delivery(){
-    this.empresaService.delivery()
-    .subscribe( (resp:any)  => {
-      if( !resp.error ){
-          this.txtDelivery = resp.info.existeDelivery ? resp.info.delivery.EMPRESA_TIPO_NEGOCIO_OBS : '';
-          this.boolDelivery = resp.info.existeDelivery;
-          this.counterNegocio = resp.info.counterTipos;
-          this.tiempoEntrega = resp.info.tiempoEntrega.EMPRESA_T_ENTREGA;
-        if( this.boolDelivery && this.counterNegocio == 1){
-          this.tipoEntrega = 1;
-        }
-        if( !this.boolDelivery ){          
-          this.tipoEntrega = 2;
-        }
-      }
+  getTipoNegocio(){
+    this.tipoNegocioService.getTipoNegocio()
+    .subscribe( (resp:any)  => {      
+      this.tipoNegocio = resp.info.tiponegocio;
     });
   }
   ionViewDidEnter() {
@@ -108,14 +103,14 @@ export class Tab3Page implements OnInit {
   restar(nmbPro:string, varPro:any, cantidad:number){
     this.loadingService.loadingPresent();
     cantidad--;
-    this.storageService.insertStorage(nmbPro, varPro, cantidad);
+    this.storageService.insertStorage(nmbPro, varPro, cantidad, '');
     this.cargarProductos();
     this.loadingService.loadingDismiss();
   }
   sumar(nmbPro:string, varPro:any, cantidad:number){
     this.loadingService.loadingPresent();
     cantidad++;
-    this.storageService.insertStorage(nmbPro, varPro, cantidad);
+    this.storageService.insertStorage(nmbPro, varPro, cantidad, '');
     this.cargarProductos();
     this.loadingService.loadingDismiss();
   }
@@ -126,19 +121,13 @@ export class Tab3Page implements OnInit {
         component: ShopPage,
         componentProps: {
           subTotal: this.totalProductos,
-          obs: this.txtObs,
           tipo: this.tipoEntrega,
-          txtDelivery: this.txtDelivery,
-          tiempoEntrega: this.tiempoEntrega
+          productos: this.productos
         }
       });
-
-      if( !this.boolObs ){
-        this.toastService.presentToast('INDICA SI DESEAS O NO AGREGAR OBSERVACIONES.');
-        return;
-      }
+      
       if( this.tipoEntrega == 0 ){
-        this.toastService.presentToast('SELECCIONA EL TIPO DE ENTREGA.');
+        this.toastService.presentToast('SELECCIONA EL TIPO DE SERVICIO.');
         return;
       }
       await modal.present();
@@ -180,19 +169,22 @@ export class Tab3Page implements OnInit {
     await alert.present();
   }
 
-  clcObs(valor:number){
+  
+  async helpServicio() {
+    const alert = await this.alertController.create({
+      header: 'SERVICIOS',
+      subHeader: 'SELECCIONA EL TIPO DE SERVICIO QUE DESEAS:',
+      message: '<strong>DELIVERY</strong>: ENTREGA A TU HOGAR U OTRO PUNTO QUE DESEES<br><br> <strong>EN LOCAL</strong>: SOLICITARÁS TU PEDIDO ESTANDO EN EL LOCAL<br><br> <strong>RETIRO</strong>: SOLICITARÁS TU PEDIDO PARA QUE LO RETIRES CUANDO TE AVISEMOS',
+      buttons: ['CERRAR']
+    });
 
-    if( valor == 1 ){
-      this.obsAlertPrompt();
-    }
-    this.txtObs = '';
-    this.boolObs = true;
+    await alert.present();
   }
 
   clcEntrega(valor:number){
     this.tipoEntrega = valor;
   }
-  refresh(ev){
+  refresh(ev:any){
     this.instanciar();
     ev.target.complete();
   }

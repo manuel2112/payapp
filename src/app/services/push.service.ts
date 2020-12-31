@@ -30,21 +30,27 @@ export class PushService {
     });
 
     this.fcm.onNotification().subscribe(data => {
-      console.log(data);
+      //console.log(data);
       if (data.wasTapped) {
-        this.detalle(data.idProducto);
+        if( data.idProducto > 0 ){
+          this.detalle(data.idProducto);
+        }        
       } else {
-        this.showPush(data.title, data.body, data.idProducto);
+        if( data.idProducto > 0 ){
+          this.showPushProducto(data.title, data.body, data.idProducto);
+        }else{
+          this.showPushNoProducto(data.title, data.body);
+        }
       }
     });
 
     this.fcm.onTokenRefresh().subscribe(token => {
-      console.log(token);
+      //console.log(token);
     });
     // this.fcm.unsubscribeFromTopic('marketing');
   }
 
-    async showPush(title:string, body:string, idProducto:any) {
+    async showPushProducto(title:string, body:string, idProducto:any) {
       const alert = await this.alertController.create({
         header: title,
         message: body,
@@ -53,14 +59,29 @@ export class PushService {
             text: 'Cancelar',
             role: 'cancel',
             cssClass: 'secondary',
-            handler: (blah) => {
-              //console.log('Confirm Cancel: blah');
-            }
+            handler: (blah) => {}
           }, {
             text: 'VER',
             handler: () => {
-              this.detalle(idProducto);
+              this.detalle(idProducto);             
             }
+          }
+        ]
+      });
+  
+      await alert.present();
+    }
+
+    async showPushNoProducto( title:string, body:string ) {
+      const alert = await this.alertController.create({
+        header: title,
+        message: body,
+        buttons: [
+          {
+            text: 'Cerrar',
+            role: 'cancel',
+            cssClass: 'secondary',
+            handler: (blah) => {}
           }
         ]
       });

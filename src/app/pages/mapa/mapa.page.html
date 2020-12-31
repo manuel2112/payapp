@@ -1,16 +1,16 @@
 <ion-header [translucent]="true" no-border>
-    <ion-toolbar color="secondary">
+    <ion-toolbar [color]="colorsegundo">
 
         <ion-title>{{ nmbEmpresa }}</ion-title>
 
-        <ion-button color="secondary" class="noborder" slot=end (click)="salir()">
+        <ion-button [color]="colorsegundo" class="noborder" slot=end (click)="salir()">
             <ion-icon name="close-outline"></ion-icon>
         </ion-button>
 
     </ion-toolbar>
 </ion-header>
 
-<ion-content color="primary">
+<ion-content [color]="colorprimero">
     <div *ngIf=" !load ">
         <ion-skeleton-text animated style="width: 50%;height: 40px;"></ion-skeleton-text>
         <ion-skeleton-text animated style="width: 100%;height: 500px;"></ion-skeleton-text>

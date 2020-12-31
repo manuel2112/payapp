@@ -1,5 +1,5 @@
 <ion-header [translucent]="true" no-border>
-    <ion-toolbar color="secondary">
+    <ion-toolbar [color]="colorsegundo">
 
         <ion-buttons slot="start">
             <ion-back-button defaultHref="/"></ion-back-button>
@@ -9,14 +9,14 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding color="primary">
+<ion-content padding [color]="colorprimero">
 
     <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
         <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
     <div *ngIf=" !load ">
-        <ion-item *ngFor="let x of arraySk" color="primary">
+        <ion-item *ngFor="let x of arraySk" [color]="colorprimero">
             <ion-col>
                 <ion-skeleton-text animated style="width: 50%; height: 20px"></ion-skeleton-text>
             </ion-col>
@@ -30,7 +30,7 @@
 
         <ion-grid>
 
-            <ion-item *ngFor="let horario of horarios" color="primary">
+            <ion-item *ngFor="let horario of horarios" [color]="colorprimero" [style]="styleBorder">
                 <ion-col>
                     {{ horario.HORARIO_DIA_OPEN | dia }}
                 </ion-col>

@@ -1,5 +1,5 @@
 <ion-header [translucent]="true" no-border>
-    <ion-toolbar color="secondary">
+    <ion-toolbar [color]="colorsegundo">
 
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
@@ -9,7 +9,7 @@
 
         <ion-buttons slot="end">
             <ion-button id="cart-btn" (click)="irShop()">
-                <ion-badge color="primary" *ngIf="countShop > 0">{{ countShop }}</ion-badge>
+                <ion-badge [color]="colorprimero" *ngIf="countShop > 0">{{ countShop }}</ion-badge>
                 <ion-icon name="cart"></ion-icon>
             </ion-button>
         </ion-buttons>
@@ -18,7 +18,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" color="primary">
+<ion-content [fullscreen]="true" [color]="colorprimero">
 
     <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
         <ion-refresher-content></ion-refresher-content>
@@ -26,6 +26,9 @@
 
     <div *ngIf=" !load ">
         <ion-skeleton-text animated style="width: 100%; height: 200px"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%;" *ngFor="let x of arraySk"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%;" *ngFor="let x of arraySk"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%;" *ngFor="let x of arraySk"></ion-skeleton-text>
         <ion-skeleton-text animated style="width: 100%;" *ngFor="let x of arraySk"></ion-skeleton-text>
         <ion-skeleton-text animated style="width: 100%; height: 40px"></ion-skeleton-text>
     </div>
@@ -51,14 +54,14 @@
         <h1>{{ producto.PRODUCTO_NOMBRE }}</h1>
         <p class="desc">{{ producto.PRODUCTO_DESC }}</p>
 
-        <ion-row *ngFor="let precio of precios" color="empresa">
-            <ion-col size="8">
+        <ion-row *ngFor="let precio of precios">
+            <ion-col size="7">
                 {{ precio.PROVAR_VALOR | peso }}
                 <span class="aviso" *ngIf="precio.PROVAR_STOCK == 0">SIN STOCK</span>
                 <span class="aviso" *ngIf="stock[precio.PROVAR_ID] > 0">STOCK MÁXIMO</span>
                 <br/> {{ precio.PROVAR_DESC }}
             </ion-col>
-            <ion-col size="4" class="operador">
+            <ion-col size="3" class="operador">
                 <ion-icon name="remove-outline" *ngIf="cantidad[precio.PROVAR_ID] > 0" (click)="restar(producto.PRODUCTO_NOMBRE , precio, cantidad[precio.PROVAR_ID], precio.PROVAR_STOCK)"></ion-icon>
                 <ion-icon name="remove-outline" *ngIf="!cantidad[precio.PROVAR_ID]"></ion-icon>
 
@@ -66,21 +69,34 @@
 
                 <ion-icon name="add-outline" *ngIf="precio.PROVAR_STOCK == 0 || stock[precio.PROVAR_ID] > 0"></ion-icon>
                 <ion-icon name="add-outline" *ngIf="(precio.PROVAR_STOCK > 0) && (!stock[precio.PROVAR_ID]) || !precio.PROVAR_STOCK " (click)="sumar(producto.PRODUCTO_NOMBRE , precio, cantidad[precio.PROVAR_ID], precio.PROVAR_STOCK)"></ion-icon>
+            </ion-col>
+            <ion-col size="1">
+                <ion-button [color]="colortercero" size="small" *ngIf="cantidad[precio.PROVAR_ID] > 0" (click)="obsAlert( producto.PRODUCTO_NOMBRE , precio, cantidad[precio.PROVAR_ID] )">
+                    <ion-icon name="pencil-outline"></ion-icon>
+                </ion-button>
+                <ion-button [color]="colortercero" size="small" *ngIf="!cantidad[precio.PROVAR_ID]" disabled="true">
+                    <ion-icon name="pencil-outline"></ion-icon>
+                </ion-button>
+            </ion-col>
+        </ion-row>
 
+        <ion-row>
+            <ion-col>
+                <div class="ion-text-center ion-margin-top">
+                    * PARA INDICAR ALGUNA OBSERVACIÓN EN TU PEDIDO HAS CLICK EN
+                    <ion-button [color]="colortercero" size="small">
+                        <ion-icon name="pencil-outline"></ion-icon>
+                    </ion-button>
+                </div>
             </ion-col>
         </ion-row>
 
         <ion-grid>
             <ion-row>
                 <ion-col size="12">
-                    <ion-button expand="block" color="secondary" [disabled]="disabled" (click)="irShop()">Comprar</ion-button>
+                    <ion-button expand="block" [color]="colorsegundo" [disabled]="disabled" (click)="irShop()">Comprar</ion-button>
                 </ion-col>
             </ion-row>
-            <!-- <ion-row>
-                <ion-col>
-                    <ion-button expand="block" color="default" (click)="limpiarStorage()">LIMPIAR</ion-button>
-                </ion-col>
-            </ion-row> -->
         </ion-grid>
     </div>
 

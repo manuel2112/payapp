@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { AlertController, ModalController } from '@ionic/angular';
 import { ZoomImagenPage  } from '../zoom-imagen/zoom-imagen.page';
 
 import { MenuService } from '../../services/menu.service';
 import { StorageService } from '../../services/storage.service';
+import { ColoresService } from '../../services/colores.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-producto',
@@ -24,13 +26,22 @@ export class ProductoPage implements OnInit {
   countShop:number = 0 ;
   cantidad:any = [] ;
   arraySk:any = Array(20);
+  colorprimero:string = '';
+  colorsegundo:string = '';
+  colortercero:string = '';
 
   constructor( private route: ActivatedRoute,
                private router: Router,
                private menuService:MenuService,
                private modalCtrl:ModalController,
-               private storageService:StorageService) {}
+               private storageService:StorageService,
+               private coloresService:ColoresService,
+               private alertController: AlertController,
+               private toastService: ToastService ) {}
 
+  ngOnInit(){
+    this.getColores();
+  }
   ionViewWillEnter(){
     this.instanciar();
   }
@@ -38,9 +49,13 @@ export class ProductoPage implements OnInit {
     this.load = false;
     this.id = this.route.snapshot.paramMap.get('id');
     this.getProducto(this.id);
-    // this.pager = this.imagenes.length > 0 ? true : false;
     this.storageService.getStorage();
     this.countShop = this.storageService.countProductos();
+  }
+  getColores(){
+    this.colorprimero = this.coloresService.colorprimero;
+    this.colorsegundo = this.coloresService.colorsegundo;
+    this.colortercero = this.coloresService.colortercero;
   }
   getProducto(id:number){
     this.menuService.getProducto(this.id)
@@ -52,8 +67,6 @@ export class ProductoPage implements OnInit {
       this.pager = this.imagenes.length > 0 ? true : false;
       this.load = !(resp.error);
     });
-  }
-  ngOnInit() {
   }
 
   existeProducto(objeto:any){
@@ -85,7 +98,7 @@ export class ProductoPage implements OnInit {
     
     if( value.detail.value ){
       
-      this.storageService.insertStorage(nmbPro, varPro, value.detail.value);
+      this.storageService.insertStorage(nmbPro, varPro, value.detail.value, '');
       this.disabled = false;
 
     }else{
@@ -105,7 +118,7 @@ export class ProductoPage implements OnInit {
       this.stock[varPro.PROVAR_ID] = '';
     }
     this.cantidad[varPro.PROVAR_ID] = cantidad;
-    this.storageService.insertStorage(nmbPro, varPro, cantidad);
+    this.storageService.insertStorage(nmbPro, varPro, cantidad, '');
     if( cantidad == 0 ){
       var counter = this.storageService.countProductos();
       this.storageService.borrarUltimo( counter - 1 );
@@ -123,7 +136,7 @@ export class ProductoPage implements OnInit {
       this.stock[varPro.PROVAR_ID] = stock;
     }
     this.cantidad[varPro.PROVAR_ID] = cantidad;
-    this.storageService.insertStorage(nmbPro, varPro, cantidad);
+    this.storageService.insertStorage(nmbPro, varPro, cantidad, '');
     this.countShop = this.storageService.countProductos();
     this.disabled = false;
   }
@@ -132,11 +145,36 @@ export class ProductoPage implements OnInit {
     this.router.navigate(['tabs/tab3']);
   }
 
-  limpiarStorage(){
-    this.storageService.limpiarStorage();
-    this.countShop = 0;
-    this.disabled = true;
-    console.log('LIMPIO');
+  async obsAlert( nmbPro:string, varPro:any, cantidad:number ) {
+    var stObs = this.storageService.getObs(varPro.PROVAR_ID);
+    const alert = await this.alertController.create({
+      header: 'OBSERVACIÓN',
+      inputs: [
+        {
+          name: 'observacion',
+          type: 'textarea',
+          value: stObs,
+          placeholder: 'ESCRIBE AQUÍ TU OBS.'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancelar',
+          cssClass: 'secondary',
+          handler: () => {
+          }
+        }, {
+          text: 'Agregar',
+          handler: (data) => {
+            this.storageService.insertStorage(nmbPro, varPro, cantidad, data.observacion);
+            this.toastService.presentToast('OBSERVACIÓN AGREGADA');
+          }
+        }
+      ]
+    });
+    
+    await alert.present();
   }
   refresh(ev){
     this.instanciar();

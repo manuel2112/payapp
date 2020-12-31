@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  IDEMPRESA: 1 ,
+  IDEMPRESA: 1,
   URI: 'http://www.localfood.cl/app/'
 };
 

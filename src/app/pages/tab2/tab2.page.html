@@ -1,5 +1,5 @@
 <ion-header [translucent]="true" no-border>
-    <ion-toolbar color="secondary">
+    <ion-toolbar [color]="colorsegundo">
 
         <ion-title slot="start">
             MENÚ
@@ -11,7 +11,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" color="primary">
+<ion-content [fullscreen]="true" [color]="colorprimero">
 
     <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
         <ion-refresher-content></ion-refresher-content>
@@ -20,10 +20,10 @@
     <div *ngIf=" !load ">
 
         <ion-list>
-            <ion-list-header color="primary">
+            <ion-list-header [color]="colorprimero">
                 <ion-skeleton-text animated style="width: 50%; height: 30px;"></ion-skeleton-text>
             </ion-list-header>
-            <ion-item color="primary" *ngFor="let x of arraySk">
+            <ion-item [color]="colorprimero" *ngFor="let x of arraySk">
                 <ion-avatar slot="start">
                     <ion-skeleton-text animated style="width: 100%;"></ion-skeleton-text>
                 </ion-avatar>
@@ -39,10 +39,10 @@
     <div *ngIf=" load ">
 
         <ion-list *ngFor="let item of menu">
-            <ion-list-header color="primary">
+            <ion-list-header [color]="colorprimero">
                 {{ item.TIPO_PRODUCTO_NOMBRE }}
             </ion-list-header>
-            <ion-item *ngFor="let producto of item.productos" button detail color="primary" (click)="detalle(producto.PRODUCTO_ID)">
+            <ion-item *ngFor="let producto of item.productos" button detail [color]="colorprimero" (click)="detalle(producto.PRODUCTO_ID)">
                 <ion-avatar slot="start">
                     <img [src]="producto.PRODUCTO_IMG | url">
                 </ion-avatar>

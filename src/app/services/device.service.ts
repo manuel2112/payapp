@@ -31,6 +31,13 @@ export class DeviceService {
       //console.log(response);               
     });
 
-  } 
+  }
+
+  getUUID(){
+    return this.device.uuid;
+  }
+  getModel(){
+    return this.device.manufacturer;
+  }
 
 }

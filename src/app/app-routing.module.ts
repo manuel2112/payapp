@@ -33,10 +33,23 @@ const routes: Routes = [
   {
     path: 'mapa',
     loadChildren: () => import('./pages/mapa/mapa.module').then( m => m.MapaPageModule)
-  },  {
+  },
+  {
     path: 'notificacion',
     loadChildren: () => import('./pages/notificacion/notificacion.module').then( m => m.NotificacionPageModule)
+  },
+  {
+    path: 'detalle-compra',
+    loadChildren: () => import('./pages/detalle-compra/detalle-compra.module').then( m => m.DetalleCompraPageModule)
+  },
+  {
+    path: 'compras',
+    loadChildren: () => import('./pages/compras/compras.module').then( m => m.ComprasPageModule)
+  },  {
+    path: 'compra-single',
+    loadChildren: () => import('./pages/compra-single/compra-single.module').then( m => m.CompraSinglePageModule)
   }
+
 
 ];
 @NgModule({

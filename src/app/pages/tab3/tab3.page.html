@@ -1,5 +1,5 @@
 <ion-header [translucent]="true" no-border>
-    <ion-toolbar color="secondary">
+    <ion-toolbar [color]="colorsegundo">
 
         <ion-buttons slot="start">
             <ion-back-button></ion-back-button>
@@ -10,7 +10,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" color="primary">
+<ion-content [fullscreen]="true" [color]="colorprimero">
 
     <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
         <ion-refresher-content></ion-refresher-content>
@@ -23,13 +23,13 @@
     <div *ngIf=" load ">
 
         <div *ngIf="productos.length == 0">
-            <ion-button color="secondary" class="canasta-vacia" expand="block" (click)="irMenu()">
+            <ion-button [color]="colorsegundo" class="canasta-vacia" expand="block" (click)="irMenu()">
                 TIENES TU CANASTE VACIA <br> REVISA NUESTROS PRODUCTOS AQUÍ
             </ion-button>
         </div>
 
         <div *ngIf="productos.length > 0">
-            <ion-grid *ngFor="let producto of (productos | ordenProducto); let i=index" style="border-bottom: 1px solid var(--ion-color-secondary)">
+            <ion-grid *ngFor="let producto of (productos | ordenProducto); let i=index" [style]="styleBorder">
                 <ion-row>
                     <ion-col>
                         {{ producto.nmbPro }} - {{ producto.varPro.PROVAR_DESC }}
@@ -51,7 +51,7 @@
                 </ion-row>
             </ion-grid>
 
-            <ion-item color="secondary" class="total">
+            <ion-item [color]="colorsegundo" class="total">
                 <ion-label>
                     Total:
                 </ion-label>
@@ -63,47 +63,13 @@
             <ion-grid>
                 <ion-row>
                     <ion-col size="12" class="ion-text-center">
-                        OBSERVACIONES
+                        ¿QUÉ SERVICIO DESEAS?
+                        <ion-icon name="help-circle-outline" class="help" (click)="helpServicio()"></ion-icon>
                     </ion-col>
                     <ion-col size="12">
                         <ion-segment mode="ios">
-                            <ion-segment-button (click)="clcObs(1)">
-                                <ion-label>SI</ion-label>
-                            </ion-segment-button>
-                            <ion-segment-button (click)="clcObs(2)">
-                                <ion-label>NO</ion-label>
-                            </ion-segment-button>
-                        </ion-segment>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-
-            <!-- SOLO DELIVERY -->
-            <ion-item color="secondary" *ngIf="boolDelivery && counterNegocio == 1">
-                <ion-label class="ion-text-center">
-                    ÉSTA EMPRESA SOLO REALIZA DELIVERY
-                </ion-label>
-            </ion-item>
-
-            <!-- SOLO LOCAL -->
-            <ion-item color="secondary" *ngIf="!boolDelivery">
-                <ion-label class="ion-text-center">
-                    SOLO ENTREGA O SERVICIO <br> EN LOCAL
-                </ion-label>
-            </ion-item>
-
-            <ion-grid *ngIf="boolDelivery && counterNegocio > 1">
-                <ion-row>
-                    <ion-col size="12" class="ion-text-center">
-                        ¿QUÉ DESEAS?
-                    </ion-col>
-                    <ion-col size="12">
-                        <ion-segment mode="ios">
-                            <ion-segment-button (click)="clcEntrega(1)">
-                                <ion-label>DELIVERY</ion-label>
-                            </ion-segment-button>
-                            <ion-segment-button (click)="clcEntrega(2)">
-                                <ion-label>RETIRO EN LOCAL</ion-label>
+                            <ion-segment-button *ngFor="let negocio of tipoNegocio" (click)="clcEntrega(negocio.TIPO_NEGOCIO_ID)">
+                                <ion-label>{{ negocio.TIPO_NEGOCIO_ABR }}</ion-label>
                             </ion-segment-button>
                         </ion-segment>
                     </ion-col>
@@ -112,9 +78,9 @@
 
             <ion-row>
                 <ion-col size="12">
-                    <ion-button color="secondary" expand="block" *ngIf="open == 1 " (click)="abrirShop()">PAGAR</ion-button>
-                    <ion-button color="tertiary" expand="block" *ngIf="open == 0 && timeBack == ''" routerLink="/horario">CERRADO</ion-button>
-                    <ion-button color="tertiary" expand="block" *ngIf="open == 0 && timeBack != ''" routerLink="/horario">CERRADO {{ timeBack }} para abrir.</ion-button>
+                    <ion-button [color]="colorsegundo" expand="block" *ngIf="open == 1 " (click)="abrirShop()">PAGAR</ion-button>
+                    <ion-button [color]="colortercero" expand="block" *ngIf="open == 0 && timeBack == ''" routerLink="/horario">CERRADO</ion-button>
+                    <ion-button [color]="colortercero" expand="block" *ngIf="open == 0 && timeBack != ''" routerLink="/horario">CERRADO {{ timeBack }} para abrir.</ion-button>
                 </ion-col>
             </ion-row>
         </div>

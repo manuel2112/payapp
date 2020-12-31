@@ -48,7 +48,7 @@ img.w100 {
 }
 
 ion-skeleton-text {
-    --background-rgb: var(-–ion-color-btnprimary);
+    --background-rgb: 255, 255, 255;
 }
 
 .gm-style .gm-style-iw {
@@ -67,4 +67,9 @@ ion-button.noborder {
 .swiper-pagination-bullet-active {
     opacity: 0.9;
     background: white;
+}
+
+// Animaciones
+.animated {
+    transition: 1s linear;
 }

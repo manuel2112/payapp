@@ -1,14 +1,14 @@
 <ion-header [translucent]="true" no-border>
-    <ion-toolbar color="barra">
+    <ion-toolbar [color]="colorsegundo">
 
         <ion-title>{{ producto }}</ion-title>
-        <ion-button color="barra" slot=end (click)="salir()">
+        <ion-button [color]="colorsegundo" slot=end (click)="salir()">
             <ion-icon name="close-outline"></ion-icon>
         </ion-button>
     </ion-toolbar>
 </ion-header>
 
-<ion-content color="empresa">
+<ion-content [color]="colorprimero">
 
     <div *ngIf=" img == '' ">
         <ion-skeleton-text animated style="width: 100%; height: 300px"></ion-skeleton-text>

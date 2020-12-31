@@ -1,16 +1,16 @@
 <ion-header [translucent]="true" no-border>
-    <ion-toolbar color="secondary">
+    <ion-toolbar [color]="colorsegundo">
 
         <ion-title>COMPRAR</ion-title>
 
-        <ion-button color="secondary" class="noborder" slot=end (click)="salir()">
+        <ion-button [color]="colorsegundo" class="noborder" slot=end (click)="salir()">
             <ion-icon name="close-outline"></ion-icon>
         </ion-button>
 
     </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" color="primary">
+<ion-content [fullscreen]="true" [color]="colorprimero">
 
     <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
         <ion-refresher-content></ion-refresher-content>
@@ -24,10 +24,10 @@
 
         <ion-grid>
             <ion-row>
-                <ion-col size="6">
-                    ¿Quieres dar propina?
+                <ion-col size="12" class="ion-text-center">
+                    PROPINA
                 </ion-col>
-                <ion-col size="6">
+                <ion-col size="12">
                     <ion-segment mode="ios">
                         <ion-segment-button value="1" (click)="darPropina(1)">
                             <ion-label>SI</ion-label>
@@ -40,8 +40,46 @@
             </ion-row>
         </ion-grid>
 
+        <ion-row *ngIf=" tipo == 1 && sectores != '' ">
+            <ion-col size="12">
+                <ion-button [color]="colorsegundo" expand="block" (click)="showHidde()" class="ion-text-wrap" *ngIf=" numMonto >= subTotal ">{{ txtBotonSector }}</ion-button>
+            </ion-col>
+        </ion-row>
+        <div [hidden]="ishidden">
+            <ion-item *ngFor="let sector of sectores" button [color]="colorprimero" (click)="selectSector(sector)">
+                <ion-label class="ion-text-wrap">
+                    <h2>{{ sector.SECTOR_OBS }}</h2>
+                    <h3>{{ sector.SECTOR_VALOR | peso }}</h3>
+                </ion-label>
+            </ion-item>
+        </div>
+
+        <ion-row>
+            <ion-col size="12">
+                <ion-button [color]="colorsegundo" expand="block" *ngIf=" tipo != 1 " (click)="alertCtrlOtro()">{{ txtDatos }}</ion-button>
+                <ion-button [color]="colorsegundo" expand="block" *ngIf=" tipo == 1 " (click)="alertCtrlDelivery()">{{ txtDatos }}</ion-button>
+            </ion-col>
+        </ion-row>
+
+        <ion-list *ngIf="boolConfirma && tipo == 1">
+            <ion-item [color]="colorsegundo">
+                <ion-button [color]="colorprimero" expand="block" class="obj-center" (click)="areaReparto()">VER ÁREAS DE REPARTO AQUÍ</ion-button>
+            </ion-item>
+            <ion-item [color]="colorsegundo">
+                <ion-label>Confirmo que vivo dentro de las áreas<br> de reparto</ion-label>
+                <ion-checkbox slot="end" (ionChange)="confirmarArea($event)"></ion-checkbox>
+            </ion-item>
+        </ion-list>
+
+        <!-- TEXTO MONTO MÍNIMO -->
+        <ion-item [color]="colorsegundo" *ngIf=" (txtMonto != '') && (tipo == 1) ">
+            <ion-label class="ion-text-center ion-text-wrap">
+                {{ txtMonto }}
+            </ion-label>
+        </ion-item>
+
         <!-- PROPINA -->
-        <ion-item color="secondary">
+        <ion-item [color]="colorsegundo">
             <ion-label>
                 Propina:
             </ion-label>
@@ -51,7 +89,7 @@
         </ion-item>
 
         <!-- SUBTOTAL -->
-        <ion-item color="secondary">
+        <ion-item [color]="colorsegundo">
             <ion-label>
                 Sub-total:
             </ion-label>
@@ -60,8 +98,17 @@
             </span>
         </ion-item>
 
+        <!-- DELIVERY -->
+        <ion-item [color]="colorsegundo" *ngIf=" tipo == 1 ">
+            <ion-label>
+                Delivery:
+            </ion-label>
+            <span slot="end" *ngIf="numMonto < subTotal"> $0 </span>
+            <span slot="end" *ngIf="numMonto >= subTotal"> {{ montoDelivery | peso }} </span>
+        </ion-item>
+
         <!-- TOTAL -->
-        <ion-item color="secondary">
+        <ion-item [color]="colorsegundo">
             <ion-label>
                 Total:
             </ion-label>
@@ -70,26 +117,16 @@
             </span>
         </ion-item>
 
-        <ion-row>
-            <ion-col size="12">
-                <ion-button color="tertiary" expand="block" (click)="datosAlertPrompt()">INGRESA TUS DATOS AQUÍ</ion-button>
-            </ion-col>
-        </ion-row>
-
-        <ion-list *ngIf="boolConfirma && tipo == 1">
-            <ion-item color="tertiary">
-                <ion-button color="primary" expand="block" class="obj-center" (click)="areaReparto()">VER ÁREAS DE REPARTO AQUÍ</ion-button>
-            </ion-item>
-            <ion-item color="tertiary">
-                <ion-label>Confirmo que vivo dentro de las áreas<br> de reparto</ion-label>
-                <ion-checkbox slot="end" (ionChange)="confirmarArea($event)"></ion-checkbox>
-            </ion-item>
-        </ion-list>
+        <!-- TIEMPO DE ENTREGA -->
+        <ion-item [color]="colorsegundo" *ngIf=" tipo != 2 ">
+            <ion-label class="ion-text-center ion-text-wrap">
+                {{ tiempoEntrega }}
+            </ion-label>
+        </ion-item>
 
         <ion-row>
             <ion-col size="12">
-                <p class="tiempo">{{ tiempoEntrega }}</p>
-                <ion-button color="secondary " expand="block " (click)="pagar() ">REALIZAR PAGO</ion-button>
+                <ion-button [color]="colorsegundo " expand="block " (click)="pagar() ">REALIZAR PAGO</ion-button>
             </ion-col>
         </ion-row>
     </div>

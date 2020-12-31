@@ -15,9 +15,9 @@ export class StorageService {
   constructor( private nativeStorage: NativeStorage,
                public platform: Platform) { }
 
-  insertStorage(nmbPro:string, varPro:any, cantidad:number){
+  insertStorage(nmbPro:string, varPro:any, cantidad:number, observacion:string){
     this.comprobarProductoIngresado(varPro.PROVAR_ID);
-    this.shoping.push({"nmbPro":nmbPro, "varPro":varPro, "cantidad":cantidad });
+    this.shoping.push({"nmbPro":nmbPro, "varPro":varPro, "cantidad":cantidad, "obs":observacion});
     this.guardarStorage();
   }
 
@@ -26,9 +26,9 @@ export class StorageService {
       this.nativeStorage.setItem( this.nmbSetProductos, this.shoping)
       .then(
       () => {
-        console.log('Stored item!');
+        //console.log('Stored item!');
       },
-        error => console.error('Error storing item', error)
+        //error => console.error('Error storing item', error)
       );
     }else{      
       localStorage.setItem( this.nmbSetProductos, JSON.stringify(this.shoping));
@@ -62,6 +62,20 @@ export class StorageService {
     return cantidad;
   }
 
+  getObs(idVarPro:number){
+
+    var obs = '';
+    const carrito = this.shoping;
+    for (var i = 0; i < carrito.length; ++i) {
+      var elemento = carrito[i];
+      if ( idVarPro === elemento.varPro.PROVAR_ID ) {
+        obs = elemento.obs;  
+          break;
+      }
+    }
+    return obs;
+  }
+
   totalPagar(carrito:any){
 
     var pagar = 0;
@@ -88,7 +102,7 @@ export class StorageService {
       this.nativeStorage.getItem(this.nmbSetProductos)
       .then(
         data => this.shoping = data ? data : [],
-        error => console.error(error)
+        // error => console.error(error)
       );
     }else{
 
@@ -108,8 +122,10 @@ export class StorageService {
   limpiarStorage(){
     if(this.platform.is('cordova')){
       this.nativeStorage.remove(this.nmbSetProductos);
+      this.shoping = [];
     }else{
       localStorage.removeItem(this.nmbSetProductos);
+      this.shoping = [];
     }
   }
 

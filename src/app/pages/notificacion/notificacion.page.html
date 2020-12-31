@@ -1,5 +1,5 @@
 <ion-header [translucent]="true" no-border>
-    <ion-toolbar color="secondary">
+    <ion-toolbar [color]="colorsegundo">
 
         <ion-buttons slot="start">
             <ion-back-button defaultHref="tabs/tab2"></ion-back-button>
@@ -9,7 +9,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding color="primary">
+<ion-content padding [color]="colorprimero">
 
     <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
         <ion-refresher-content></ion-refresher-content>
@@ -17,8 +17,8 @@
 
     <div *ngIf=" !load ">
 
-        <ion-card color="secondary" *ngFor="let x of arraySk">
-            <ion-item color="secondary">
+        <ion-card [color]="colorsegundo" *ngFor="let x of arraySk">
+            <ion-item [color]="colorsegundo">
                 <ion-skeleton-text animated style="width: 30%; height: 15px;"></ion-skeleton-text>
             </ion-item>
             <ion-card-header>
@@ -43,10 +43,10 @@
             <h1>SIN NOTIFICACIONES PARA MOSTRAR</h1>
         </div>
 
-        <ion-card *ngFor="let notificacion of notificaciones" color="secondary">
-            <ion-item color="secondary">
+        <ion-card *ngFor="let notificacion of notificaciones" [color]="colorsegundo">
+            <ion-item [color]="colorsegundo">
                 <ion-card-subtitle>{{ notificacion.PUSH_DATE | date }}</ion-card-subtitle>
-                <ion-button fill="outline" slot="end" color="tertiary" *ngIf="notificacion.PRODUCTO_ID != 0" (click)="detalle(notificacion.PRODUCTO_ID)">VER</ion-button>
+                <ion-button fill="outline" slot="end" [color]="colorprimero" *ngIf="notificacion.PRODUCTO_ID != 0" (click)="detalle(notificacion.PRODUCTO_ID)">VER</ion-button>
             </ion-item>
             <ion-card-header>
                 <ion-card-title>{{ notificacion.PUSH_TITLE }}</ion-card-title>

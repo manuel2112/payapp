@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 
+import { ColoresService } from '../../services/colores.service';
+
 declare var google: any;
 
 @Component({
@@ -20,11 +22,15 @@ export class MapaPage implements OnInit {
   map:any;
   @ViewChild('map', { read: ElementRef,static: false}) mapRef: ElementRef;
   infoWindows:any = [];
+  colorprimero:string = '';
+  colorsegundo:string = '';
 
 
-  constructor( private modalCtrl:ModalController) { }
+  constructor( private modalCtrl:ModalController,
+               private coloresService:ColoresService ) { }
 
   ngOnInit(){
+    this.getColores();
     setTimeout(()=>{
       this.loadingMap = true;
       if (this.loadingMap == true) {
@@ -32,6 +38,10 @@ export class MapaPage implements OnInit {
         this.load = true;
       }
     },500);
+  }
+  getColores(){
+    this.colorprimero = this.coloresService.colorprimero;
+    this.colorsegundo = this.coloresService.colorsegundo;
   }
 
   showMap(){

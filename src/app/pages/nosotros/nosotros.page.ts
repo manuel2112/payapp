@@ -3,7 +3,9 @@ import { ModalController } from '@ionic/angular';
 
 import { MapaPage } from '../mapa/mapa.page';
 import { EmpresaService } from '../../services/empresa.service';
+import { TipoNegocioService } from '../../services/tipo-negocio.service';
 import { SocialService } from '../../services/social.service';
+import { ColoresService } from '../../services/colores.service';
 
 @Component({
   selector: 'app-nosotros',
@@ -12,20 +14,25 @@ import { SocialService } from '../../services/social.service';
 })
 export class NosotrosPage implements OnInit {
 
-  NMBEMPRESA = '';
-  LATITUD  = '';
-  LONGITUD  = '';
-  DIRECCION  = '';
+  nmbEmpresa = '';
+  lat  = '';
+  lgt  = '';
+  direccion  = '';
   empresa:any = [];
   load:boolean = false;
   tipoNegocio:any = [];
   arraySk:any = Array(20);
+  colorprimero:string = '';
+  colorsegundo:string = '';
 
   constructor(  private empresaService:EmpresaService,
                 private modalCtrl:ModalController,
-                private socialService:SocialService) { }           
+                private socialService:SocialService, 
+                private coloresService:ColoresService, 
+                private tipoNegocioService:TipoNegocioService ) { }           
 
   ngOnInit() {
+    this.getColores();
   }
   ionViewWillEnter(){
     this.instanciar();
@@ -33,16 +40,26 @@ export class NosotrosPage implements OnInit {
   instanciar(){
     this.load = false;
     this.getEmpresa();
+    this.getTipoNegocio();
+  }
+  getColores(){
+    this.colorprimero = this.coloresService.colorprimero;
+    this.colorsegundo = this.coloresService.colorsegundo;
   }
   getEmpresa(){
     this.empresaService.getTopDatos()
     .subscribe( (resp:any)  => {
       this.empresa = resp.info.empresa;
-      this.NMBEMPRESA = resp.info.empresa.EMPRESA_NOMBRE;
-      this.LATITUD = resp.info.empresa.EMPRESA_LAT;
-      this.LONGITUD = resp.info.empresa.EMPRESA_LONG;
-      this.DIRECCION = resp.info.empresa.EMPRESA_DIRECCION +', '+ resp.info.empresa.CIUDAD_NOMBRE;
-      this.tipoNegocio = resp.info.tipoNegocio;
+      this.nmbEmpresa = resp.info.empresa.EMPRESA_NOMBRE;
+      this.lat = resp.info.empresa.EMPRESA_LAT;
+      this.lgt = resp.info.empresa.EMPRESA_LONG;
+      this.direccion = resp.info.empresa.EMPRESA_DIRECCION +', '+ resp.info.empresa.CIUDAD_NOMBRE;
+    });
+  }
+  getTipoNegocio(){
+    this.tipoNegocioService.getTipoNegocio()
+    .subscribe( (resp:any)  => {      
+      this.tipoNegocio = resp.info.tiponegocio;
       this.load = !(resp.error);
     });
   }
@@ -52,14 +69,15 @@ export class NosotrosPage implements OnInit {
     const modal = await this.modalCtrl.create({
         component: MapaPage,
         componentProps: {
-          lat: this.LATITUD,
-          lgt: this.LONGITUD,
-          direccion: this.DIRECCION,
-          nmbEmpresa: this.NMBEMPRESA
+          lat: this.lat,
+          lgt: this.lgt,
+          direccion: this.direccion,
+          nmbEmpresa: this.nmbEmpresa
         }
       });
       await modal.present();
   }
+  
   refresh(ev){
     this.instanciar();
     ev.target.complete();

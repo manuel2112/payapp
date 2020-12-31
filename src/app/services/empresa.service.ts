@@ -8,7 +8,11 @@ import { environment} from '../../environments/environment.prod'
 })
 export class EmpresaService {
 
-  constructor( private http:HttpClient ) {}
+  tiempoEntrega:string = '';
+
+  constructor( private http:HttpClient ) {
+    this.getInstanciar();
+  }
 
    getTopDatos(){
      return this.http.get<Info>( environment.URI + 'clienterest/' + environment.IDEMPRESA);
@@ -16,8 +20,11 @@ export class EmpresaService {
    apertura(){
      return this.http.get<Info>( environment.URI + 'clienterest/apertura/' + environment.IDEMPRESA);
    }
-   delivery(){
-     return this.http.get<Info>( environment.URI + 'clienterest/delivery/' + environment.IDEMPRESA);
-   }
+   getInstanciar(){
+    return this.http.get<Info>( environment.URI + 'clienterest/' + environment.IDEMPRESA)
+    .subscribe( (resp:any)  => {
+      this.tiempoEntrega = resp.info.empresa.EMPRESA_T_ENTREGA;  
+    });
+  }
 
 }

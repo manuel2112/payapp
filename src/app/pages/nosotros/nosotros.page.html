@@ -1,5 +1,5 @@
 <ion-header [translucent]="true" no-border>
-    <ion-toolbar color="secondary">
+    <ion-toolbar [color]="colorsegundo">
 
         <ion-buttons slot="start">
             <ion-back-button defaultHref="/"></ion-back-button>
@@ -9,7 +9,7 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding color="primary">
+<ion-content padding [color]="colorprimero">
 
     <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
         <ion-refresher-content></ion-refresher-content>
@@ -25,6 +25,9 @@
     <div *ngIf=" load ">
 
         <h1 class="ion-text-center">{{ empresa.EMPRESA_NOMBRE }}</h1>
+        <div class="center">
+            <ion-img [src]="empresa.EMPRESA_LOGOTIPO | url"></ion-img>
+        </div>
         <p class="txt-contenido">{{ empresa.EMPRESA_DESCRIPCION }}</p>
 
         <h2 class="ion-text-center">SERVICIOS</h2>
