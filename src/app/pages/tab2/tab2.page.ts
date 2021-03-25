@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { TabsPage } from '../tabs/tabs.page';
+
+import { EmpresaService } from '../../services/empresa.service';
 import { MenuService } from '../../services/menu.service';
 import { ColoresService } from '../../services/colores.service';
 
@@ -19,17 +22,21 @@ export class Tab2Page implements OnInit {
 
   constructor( private menuService:MenuService,
                private router: Router, 
-               private coloresService:ColoresService ) {}
+               private coloresService:ColoresService,
+               private tabsPage:TabsPage,
+               private empresaService:EmpresaService ) { }
 
   ngOnInit(){
-    this.getColores();
   }
   ionViewWillEnter(){
     this.instanciar();
   }
   instanciar(){
     this.load = false;
+    this.tabsPage.getColores();
+    this.getColores();
     this.getMenu();
+    this.getEmpresa();
   }
   getColores(){
     this.colorprimero = this.coloresService.colorprimero;
@@ -40,6 +47,14 @@ export class Tab2Page implements OnInit {
     .subscribe( (resp:any)  => {
       this.menu = resp.info;
       this.load = !(resp.error);
+    });
+  }
+  getEmpresa(){
+    this.empresaService.getEmpresa()
+    .subscribe( (resp:any)  => {
+      if( resp.info.empresa.EMPRESA_MEMBRESIA == 0 ){
+        this.router.navigate(['tabs/tab1']);        
+      }
     });
   }
   detalle(id:number){    

@@ -9,8 +9,7 @@ export class GeolocationService {
   latitude:number = 0;
   longitude:number = 0;
 
-  constructor(private geolocation: Geolocation) {
-    this.geolocalizar();
+  constructor( private geolocation: Geolocation ) {
   }
 
   geolocalizar(){
@@ -21,14 +20,6 @@ export class GeolocationService {
      }).catch((error) => {
        console.log('Error getting location', error);
      });
-     
-    //  let watch = this.geolocation.watchPosition();
-    //  watch.subscribe((data) => {
-    //   console.log(data);
-    //   // data can be a set of coordinates, or an error (if an error occurred).
-    //   // data.coords.latitude
-    //   // data.coords.longitude
-    //  });
 
   }
 }

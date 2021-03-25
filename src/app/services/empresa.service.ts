@@ -14,7 +14,7 @@ export class EmpresaService {
     this.getInstanciar();
   }
 
-   getTopDatos(){
+   getEmpresa(){
      return this.http.get<Info>( environment.URI + 'clienterest/' + environment.IDEMPRESA);
    }
    apertura(){

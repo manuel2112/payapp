@@ -19,7 +19,10 @@ export class HorarioPage implements OnInit {
 
   constructor( private _shorario:HorarioService, 
                private coloresService:ColoresService ) {
-  }
+                 
+                this.coloresService.getColorStorage();
+                
+              }
 
   ngOnInit() {
     this.getColores();

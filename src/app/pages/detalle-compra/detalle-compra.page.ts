@@ -34,7 +34,11 @@ export class DetalleCompraPage implements OnInit {
                private payService:PayService,
                private loadingService:LoadingService,
                private navCtrl: NavController,
-               private storageService:StorageService ) { }
+               private storageService:StorageService ) {
+                 
+                this.coloresService.getColorStorage();
+                
+              }
 
   ngOnInit() {
     this.getColores();

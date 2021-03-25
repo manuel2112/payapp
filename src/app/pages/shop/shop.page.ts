@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 
 import { DetalleCompraPage } from '../detalle-compra/detalle-compra.page';
+import { environment } from '../../../environments/environment.prod';
 
 import { PesoPipe } from '../../pipes/peso.pipe';
 
@@ -16,6 +17,7 @@ import { PayService } from '../../services/pay.service';
 import { AperturaService } from '../../services/apertura.service';
 import { StorageOrderService } from '../../services/storage-order.service';
 import { SocialService } from '../../services/social.service';
+import { MenuService } from '../../services/menu.service';
 
 @Component({
   selector: 'app-shop',
@@ -27,6 +29,7 @@ export class ShopPage implements OnInit {
   @Input() subTotal:number;
   @Input() tipo:number;//1:DELIVERY 2:RESTAURANTE 3:RETIRO LOCAL
   @Input() productos:[];
+  @Input() articulos:[];
   propina:number = 0;
   total:number = 0;
   boolConfirma:boolean = false;
@@ -48,10 +51,10 @@ export class ShopPage implements OnInit {
   sectores:any = [];
   ishidden:boolean = true;
   txtDatos:string = 'INGRESA TUS DATOS AQUÍ';
-  txtBotonSector:string = 'SELECCIONAR ENVÍO DELIVERY';
+  txtBotonSector:string = 'SELECCIONAR MONTO DELIVERY';
   montoDelivery:number = 0;
   sectorDelivery:any = '';
-  urlPay:string = 'https://www.localfood.cl/app/paymall?token=';
+  urlPay:string = environment.URISSL + 'paymall?token=';
 
   constructor( private modalCtrl:ModalController,
                private loadingService:LoadingService,
@@ -65,7 +68,12 @@ export class ShopPage implements OnInit {
                private payService:PayService,
                private aperturaService:AperturaService,
                private storageOrderService:StorageOrderService,
-               private socialService:SocialService ) { }
+               private socialService:SocialService,
+               private menuService:MenuService ) {
+
+                this.coloresService.getColorStorage();
+
+              }
 
   ngOnInit() {
     this.getColores();
@@ -78,6 +86,9 @@ export class ShopPage implements OnInit {
     this.total = this.subTotal;
     this.storagePersonaService.getStorage();
     this.getTipoNegocio();
+    if( this.tipo == 1 ){
+      this.geolocationService.geolocalizar();
+    }
   }
   showHidde(){
     this.ishidden = false;
@@ -98,11 +109,14 @@ export class ShopPage implements OnInit {
       if( this.tipo == 1 ){
         this.txtDelivery = resp.info.tiponegocio[0].EMPRESA_TIPO_NEGOCIO_OBS;
       }
-
+      
       if( resp.info.montoMinimo ){
-        this.txtMonto = resp.info.montoMinimo.MONTO_OBS;
-        this.numMonto = resp.info.montoMinimo.MONTO_VALOR;
+          if( resp.info.montoMinimo.MONTO_MIN_GRATIS_FLAG == 1 ){
+            this.txtMonto = resp.info.montoMinimo.MONTO_MIN_GRATIS_OBS;
+            this.numMonto = resp.info.montoMinimo.MONTO_MIN_GRATIS_VALOR;
+          }         
       }
+
       if( resp.info.sectores ){
         this.sectores = resp.info.sectores;
       }
@@ -250,9 +264,9 @@ export class ShopPage implements OnInit {
         },
         {
           name: 'fonoDato',
-          type: 'number',
-          value: existe ? this.datosStoragePersona('fono') : '',
-          placeholder: 'N° CELULAR EJ. +56912345678'
+          type: 'text',
+          value: existe ? this.datosStoragePersona('fono') : '+569',
+          placeholder: 'N° CELULAR EJ. 56912345678'
         },
         {
           name: 'emailDato',
@@ -290,7 +304,7 @@ export class ShopPage implements OnInit {
               this.toastService.presentToast('NOMBRE OBLIGATORIO');
               return false;
             }
-            if( data.fonoDato == '' ){
+            if( data.fonoDato == '' || data.fonoDato == '+569' ){
               this.toastService.presentToast('N° CELULAR OBLIGATORIO');
               return false;
             }
@@ -345,8 +359,8 @@ export class ShopPage implements OnInit {
         },
         {
           name: 'fonoDato',
-          type: 'number',
-          value: existe ? this.datosStoragePersona('fono') : '',
+          type: 'text',
+          value: existe ? this.datosStoragePersona('fono') : '+569',
           placeholder: 'N° CELULAR EJ. +56912345678'
         },
         {
@@ -373,7 +387,7 @@ export class ShopPage implements OnInit {
               this.toastService.presentToast('NOMBRE OBLIGATORIO');
               return false;
             }
-            if( data.fonoDato == '' ){
+            if( data.fonoDato == '' || data.fonoDato == '+569' ){
               this.toastService.presentToast('N° CELULAR OBLIGATORIO');
               return false;
             }
@@ -413,6 +427,20 @@ export class ShopPage implements OnInit {
     }
   }
 
+  comprobarStock(){
+    this.loadingService.loadingPresent();
+      this.menuService.comprobarStock(this.productos)
+      .subscribe( (resp:any)  => {
+        this.loadingService.loadingDismiss();
+        if( !resp.error ){
+          this.toastService.presentToast(resp.info.mensaje);
+          return;
+        }else{
+          this.pagar();
+        }
+      });
+  }  
+
   pagar(){
     if(!this.boolPropina){
       this.toastService.presentToast('CONFIRMAR PROPINA');
@@ -431,7 +459,7 @@ export class ShopPage implements OnInit {
       return;
     }
     
-    if( this.tipo == 1 ){      
+    if( this.tipo == 1 ){
       this.latitude = this.geolocationService.latitude;
       this.longitude = this.geolocationService.longitude;
     }
@@ -441,8 +469,9 @@ export class ShopPage implements OnInit {
         "res":{"latitude": this.latitude, "longitude": this.longitude}
       };
       
+      //COMPROBAR SI TIENDA ESTÁ ABIERTA
       if( this.aperturaService.open == 1 ){
-        this.sendCompra( ubicacion, this.total, this.subTotal, this.propina, this.tipo, this.persona, this.productos, this.sectorDelivery); 
+        this.sendCompra( ubicacion, this.total, this.subTotal, this.propina, this.tipo, this.persona, this.productos, this.sectorDelivery, this.articulos); 
         this.loadingService.loadingPresent();
         this.modalCtrl.dismiss();
       }else{        
@@ -462,8 +491,8 @@ export class ShopPage implements OnInit {
     await alert.present();
   }
 
-  sendCompra( ubicacion, total, subTotal, propina, tipo, persona, productos, sectorDelivery){
-    this.payService.sendCompra(ubicacion, total, subTotal, propina, tipo, persona, productos, sectorDelivery)
+  sendCompra( ubicacion, total, subTotal, propina, tipo, persona, productos, sectorDelivery, articulos){
+    this.payService.sendCompra(ubicacion, total, subTotal, propina, tipo, persona, productos, sectorDelivery, articulos)
     .subscribe( (res:any)  => {
         this.storageOrderService.guardarStorage(res.info);
         this.loadingService.loadingDismiss();

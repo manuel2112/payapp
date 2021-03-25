@@ -14,7 +14,9 @@ export class TabsPage implements OnInit {
   colorsegundo:string = '';
 
   constructor( private storageService:StorageService, 
-               private coloresService:ColoresService ) {}
+               private coloresService:ColoresService ) { 
+                this.coloresService.getColorStorage();
+              }
 
   ngOnInit(){
     this.coloresService.getColores();

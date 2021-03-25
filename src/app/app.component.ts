@@ -24,8 +24,10 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
-      this.pushService.initPushNotification();
+      setTimeout(() => {
+        this.splashScreen.hide();
+        this.pushService.initPushNotification();
+      }, 1000);
     });
   }
 }

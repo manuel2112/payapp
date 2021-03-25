@@ -25,9 +25,11 @@ export class Tab1Page implements OnInit {
   load:boolean = false;
   loadEmpresa:boolean = false;
   colorprimero:string = '';
+  bgStylePrimero:string = '';
   colorsegundo:string = '';
   colortercero:string = '';
   arraySk:any = Array(20);
+  membresia:boolean = true;
 
   constructor( private empresaService:EmpresaService,
                private ofertaService:OfertasService,
@@ -35,7 +37,7 @@ export class Tab1Page implements OnInit {
                private socialService:SocialService,
                private aperturaService:AperturaService,
                private coloresService:ColoresService,
-               private tabsPage:TabsPage ) {}
+               private tabsPage:TabsPage ) { }
 
   ngOnInit(){
     this.aperturaService.updateHorario();
@@ -54,23 +56,24 @@ export class Tab1Page implements OnInit {
     this.loadPage();
   }
   getColores(){
-    this.coloresService.getColores();
     this.colorprimero = this.coloresService.colorprimero;
+    this.bgStylePrimero = `--ion-background-color: var(--ion-color-${ this.colorprimero });--ion-text-color: var(--ion-color-${ this.colorprimero }-contrast)`;
     this.colorsegundo = this.coloresService.colorsegundo;
     this.colortercero = this.coloresService.colortercero;
   }
   getEmpresa(){
-    this.empresaService.getTopDatos()
+    this.empresaService.getEmpresa()
     .subscribe( (resp:any)  => {
       this.empresa = resp.info.empresa;
       this.horaCierre = resp.info.hora.HORARIO_HORA_CLOSE;
       this.loadEmpresa = true;
+      this.membresia = resp.info.empresa.EMPRESA_MEMBRESIA == 0 ? false : true ;
     });
   }
   getOfertas(){      
     this.ofertaService.getOfertas()
     .subscribe( (resp:any)  => {
-      this.ofertas = resp.info; 
+      this.ofertas = resp.info;
     });
   }
   getDestacados(){      
@@ -80,7 +83,8 @@ export class Tab1Page implements OnInit {
     });
   }
 
-  loadPage() {
+  loadPage()
+  {
     setInterval(() => {
       var loadColor = this.coloresService.loadColor;
       if( loadColor && this.loadEmpresa ){
@@ -89,11 +93,13 @@ export class Tab1Page implements OnInit {
       if( this.colorprimero == 'instancia' ){
         this.getColores();
         this.tabsPage.getColores();
+        this.coloresService.getColorStorage();
       }
-    }, 3000);
+    }, 1000);
   }
 
-  updateHorarioTimer() {
+  updateHorarioTimer() 
+  {
     setInterval(() => {
       this.aperturaService.updateHorario();
       this.horaCierre = this.aperturaService.horaCierre;
@@ -108,11 +114,14 @@ export class Tab1Page implements OnInit {
     }, 1000);
   }
 
-  detalle(id:number){
+  detalle(id:number)
+  {
     this.router.navigate(['/producto',{ id: id }]);
   }
 
-  refresh(ev){
+  refresh(ev)
+  {
+    this.coloresService.cambiarColores();
     this.instanciar();
     ev.target.complete();
   }
@@ -120,19 +129,28 @@ export class Tab1Page implements OnInit {
   /******************************/
   /*********SOCIAL***************/
   /******************************/
-  btnFacebook(url:string){
+  btnFacebook(url:string)
+  {
     this.socialService.facebook(url);
   }
-  btnInstagram(url:string){
+  btnInstagram(url:string)
+  {
     this.socialService.instagram(url);
   }
-  btnWeb(url:string){
+  btnWeb(url:string)
+  {
     this.socialService.web(url);
   }
-  btnWhatsapp(number:string){
+  btnWhatsapp(number:string)
+  {
     this.socialService.whatsapp(number);
   }
-  btnFono(number:string){
+  btnFono(number:string)
+  {
     this.socialService.fono(number);
+  }
+  btnEmail(email:string)
+  {
+    this.socialService.email(email);
   }
 }

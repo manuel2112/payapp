@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
-import { environment} from '../../environments/environment';
+import { environment} from '../../environments/environment.prod';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
 @Injectable({

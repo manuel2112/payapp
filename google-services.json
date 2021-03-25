@@ -1,35 +1,41 @@
 {
   "project_info": {
-    "project_number": "1039558186058",
-    "firebase_url": "https://payapp-test-5c001.firebaseio.com",
-    "project_id": "payapp-test-5c001",
-    "storage_bucket": "payapp-test-5c001.appspot.com"
+    "project_number": "123248804816",
+    "project_id": "facilbak-master",
+    "storage_bucket": "facilbak-master.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1039558186058:android:9959d01d6ada6fe3dec2b3",
+        "mobilesdk_app_id": "1:123248804816:android:3bf0b52fde8e57e3ceefd5",
         "android_client_info": {
-          "package_name": "cl.localfood.master"
+          "package_name": "cl.facilbak.master"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1039558186058-hfn7g7o4mgn7dujub4udb8djdh071efj.apps.googleusercontent.com",
+          "client_id": "123248804816-duuv1n1i22psdms6rea0kvauqrobp1vh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCwePahmNs2Egl8ujSsaS-eEs9EnL1gEQc"
+          "current_key": "AIzaSyCIg52lMoF-tiWvvOwt2ltSeGhCdGL65wU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1039558186058-hfn7g7o4mgn7dujub4udb8djdh071efj.apps.googleusercontent.com",
+              "client_id": "123248804816-duuv1n1i22psdms6rea0kvauqrobp1vh.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "123248804816-b0k9d83lj12dqqnhd9ciftuf586rctt6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "cl.facilbak.master"
+              }
             }
           ]
         }

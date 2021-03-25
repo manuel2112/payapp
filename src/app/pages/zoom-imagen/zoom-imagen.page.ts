@@ -16,7 +16,11 @@ export class ZoomImagenPage implements OnInit {
   colorsegundo:string = '';
 
   constructor( private modalCtrl:ModalController,
-               private coloresService:ColoresService ) { }
+               private coloresService:ColoresService ) {
+                 
+                this.coloresService.getColorStorage();
+                
+              }
 
   ngOnInit() {
     this.getColores();

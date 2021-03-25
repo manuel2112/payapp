@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class TipoNegocioPipe implements PipeTransform {
 
-  transform(valor: string): string {
+  transform(valor: any): string {
 
     let txt;
 

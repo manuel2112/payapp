@@ -28,7 +28,11 @@ export class CompraSinglePage implements OnInit {
 
   constructor( private modalCtrl:ModalController,
                private coloresService:ColoresService,
-               private payService:PayService ) { }
+               private payService:PayService ) {
+                 
+                this.coloresService.getColorStorage();
+                
+              }
 
   ngOnInit() {
   }

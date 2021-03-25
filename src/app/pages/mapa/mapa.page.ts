@@ -27,7 +27,11 @@ export class MapaPage implements OnInit {
 
 
   constructor( private modalCtrl:ModalController,
-               private coloresService:ColoresService ) { }
+               private coloresService:ColoresService ) {
+                 
+                this.coloresService.getColorStorage();
+                
+              }
 
   ngOnInit(){
     this.getColores();

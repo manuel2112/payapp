@@ -1,10 +1,6 @@
 <ion-header [translucent]="true" no-border>
     <ion-toolbar [color]="colorsegundo">
 
-        <ion-buttons slot="start">
-            <ion-back-button></ion-back-button>
-        </ion-buttons>
-
         <ion-title>CARRITO</ion-title>
 
     </ion-toolbar>
@@ -40,13 +36,18 @@
                         {{ producto.varPro.PROVAR_VALOR * producto.cantidad | peso }}
                     </ion-col>
                     <ion-col size="4" class="operador">
-                        <ion-icon name="remove-outline" *ngIf="producto.cantidad > 1" (click)="restar(producto.nmbPro , producto.varPro, producto.cantidad)"></ion-icon>
+                        <ion-icon name="remove-outline" *ngIf="producto.cantidad > 1" (click)="restar( producto )"></ion-icon>
                         <ion-icon name="remove-outline" *ngIf="producto.cantidad <= 1"></ion-icon>
                         {{ producto.cantidad }}
-                        <ion-icon name="add-outline" (click)="sumar(producto.nmbPro , producto.varPro, producto.cantidad)"></ion-icon>
+                        <ion-icon name="add-outline" (click)="sumar( producto )"></ion-icon>
                     </ion-col>
                     <ion-col size="4" class="ion-text-center">
                         <ion-icon name="trash-outline" (click)="eliminarVarPro(producto.varPro.PROVAR_ID)"></ion-icon>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngFor="let articulo of articulos; let i=index;">
+                    <ion-col *ngIf=" producto.varPro.PROVAR_ID == articulo.PROVAR_ID ">
+                        {{ articulo.articulo | combo }}
                     </ion-col>
                 </ion-row>
             </ion-grid>
@@ -60,7 +61,7 @@
                 </span>
             </ion-item>
 
-            <ion-grid>
+            <ion-grid *ngIf=" tipoNegocio.length > 0 ">
                 <ion-row>
                     <ion-col size="12" class="ion-text-center">
                         ¿QUÉ SERVICIO DESEAS?
@@ -76,9 +77,22 @@
                 </ion-row>
             </ion-grid>
 
+            <ion-grid *ngIf=" tipoNegocio.length == 0 ">
+                <ion-row>
+                    <ion-col size="12" class="ion-text-center">
+                        ¿QUÉ SERVICIO DESEAS?
+                    </ion-col>
+                    <ion-col size="12" class="ion-text-center">
+                        <ion-button [color]="colortercero" expand="block" class="ion-text-wrap">
+                            LAMENTABLEMENTE, EN ESTOS MOMENTOS NO ESTAMOS DISPONIBLE
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+
             <ion-row>
                 <ion-col size="12">
-                    <ion-button [color]="colorsegundo" expand="block" *ngIf="open == 1 " (click)="abrirShop()">PAGAR</ion-button>
+                    <ion-button [color]="colorsegundo" expand="block" *ngIf="open == 1 " (click)="comprobarStock()">PAGAR</ion-button>
                     <ion-button [color]="colortercero" expand="block" *ngIf="open == 0 && timeBack == ''" routerLink="/horario">CERRADO</ion-button>
                     <ion-button [color]="colortercero" expand="block" *ngIf="open == 0 && timeBack != ''" routerLink="/horario">CERRADO {{ timeBack }} para abrir.</ion-button>
                 </ion-col>

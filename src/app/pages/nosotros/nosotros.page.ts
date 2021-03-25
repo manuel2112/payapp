@@ -29,7 +29,11 @@ export class NosotrosPage implements OnInit {
                 private modalCtrl:ModalController,
                 private socialService:SocialService, 
                 private coloresService:ColoresService, 
-                private tipoNegocioService:TipoNegocioService ) { }           
+                private tipoNegocioService:TipoNegocioService ) {
+                 
+                  this.coloresService.getColorStorage();
+                  
+                }
 
   ngOnInit() {
     this.getColores();
@@ -47,7 +51,7 @@ export class NosotrosPage implements OnInit {
     this.colorsegundo = this.coloresService.colorsegundo;
   }
   getEmpresa(){
-    this.empresaService.getTopDatos()
+    this.empresaService.getEmpresa()
     .subscribe( (resp:any)  => {
       this.empresa = resp.info.empresa;
       this.nmbEmpresa = resp.info.empresa.EMPRESA_NOMBRE;

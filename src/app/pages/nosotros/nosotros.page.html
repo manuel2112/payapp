@@ -2,7 +2,7 @@
     <ion-toolbar [color]="colorsegundo">
 
         <ion-buttons slot="start">
-            <ion-back-button defaultHref="/"></ion-back-button>
+            <ion-back-button defaultHref="tabs/tab1"></ion-back-button>
         </ion-buttons>
         <ion-title>NOSOTROS</ion-title>
 
@@ -26,9 +26,11 @@
 
         <h1 class="ion-text-center">{{ empresa.EMPRESA_NOMBRE }}</h1>
         <div class="center">
-            <ion-img [src]="empresa.EMPRESA_LOGOTIPO | url"></ion-img>
+            <ion-img [src]="empresa.EMPRESA_LOGOTIPO | url" class="logo"></ion-img>
+        </div>        
+        <div class="desc">
+            <p [innerHTML]=" empresa.EMPRESA_DESCRIPCION | nl2br "></p>            
         </div>
-        <p class="txt-contenido">{{ empresa.EMPRESA_DESCRIPCION }}</p>
 
         <h2 class="ion-text-center">SERVICIOS</h2>
         <p class="txt-contenido" *ngFor="let negocio of tipoNegocio"><strong>{{ negocio.TIPO_NEGOCIO_NOMBRE }}</strong>: {{ negocio.EMPRESA_TIPO_NEGOCIO_OBS }}</p>

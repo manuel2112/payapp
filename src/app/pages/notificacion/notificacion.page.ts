@@ -19,7 +19,11 @@ export class NotificacionPage implements OnInit {
 
   constructor( private notificacionService:NotificacionService,
                private router: Router,
-               private coloresService:ColoresService ) { }
+               private coloresService:ColoresService ) {
+                 
+                this.coloresService.getColorStorage();
+                
+              }
 
   ngOnInit() {
     this.getColores();

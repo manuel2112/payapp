@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { InAppBrowser, InAppBrowserOptions } from '@ionic-native/in-app-browser/ngx';
 
+import { environment } from '../../environments/environment.prod';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +15,7 @@ export class SocialService {
     clearcache : 'yes',
     clearsessioncache : 'yes',
     zoom : 'no',//Android only ,shows browser zoom controls
-    hardwareback : 'yes',
+    hardwareback : 'no',
     mediaPlaybackRequiresUserAction : 'no',
     shouldPauseOnSuspend : 'no', //Android only 
     closebuttoncaption : 'X', //iOS only
@@ -25,17 +27,17 @@ export class SocialService {
     fullscreen : 'no',//Windows only    
     hideurlbar : 'yes',//Windows only    
 };
-urlSuccessPage:string = "https://www.localfood.cl/app/index.php/paymall/exito";
+  urlSuccessPage:string = environment.URISSL + "paymall/exito";
 
   constructor( private iab: InAppBrowser,
                private platform: Platform ) { }
 
   facebook(url:string){
-    let target = "_system";
+    let target = "_blank";
     this.iab.create(url,target,this.options);
   }
   instagram(url:string){
-    let target = "_system";
+    let target = "_blank";
     this.iab.create(url,target,this.options);
   }
   web(url:string){
@@ -44,7 +46,7 @@ urlSuccessPage:string = "https://www.localfood.cl/app/index.php/paymall/exito";
   }
   whatsapp(number:string){
     let target = "_system";
-    this.iab.create(`https://wa.me/${ number }?text=Hello%20world`,target);
+    this.iab.create(`https://wa.me/${ number }?text=Hola,%20quiero%20hacer%20una%20consulta`,target);
   }
   fono(number:string){
     let target = "_system";
@@ -52,7 +54,8 @@ urlSuccessPage:string = "https://www.localfood.cl/app/index.php/paymall/exito";
   }
 
   webpay(url:string) {
-    var browser = this.iab.create(url, '_blank', 'clearcache=yes,clearsessioncache=yes,location=yes,hardwareback=no,zoom=no');
+    let target = "_blank";
+    var browser = this.iab.create(url, target, this.options);
 
     if( this.platform.is('cordova') ){
       browser.on('loadstart').subscribe((e) => {
@@ -62,6 +65,10 @@ urlSuccessPage:string = "https://www.localfood.cl/app/index.php/paymall/exito";
       });
     }
     
+  }
+
+  email(email:string){
+    window.location.href = `mailto:${ email }?subject=Hola,%20quiero%20hacer%20una%20consulta`;
   }
 
 }

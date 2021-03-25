@@ -7,6 +7,8 @@ import { NumeroPipe } from './numero.pipe';
 import { OrdenProductoPipe } from './orden-producto.pipe';
 import { DatePipe } from './date.pipe';
 import { TipoNegocioPipe } from './tipo-negocio.pipe';
+import { Nl2brPipe } from './nl2br.pipe';
+import { ComboPipe } from './combo.pipe';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { TipoNegocioPipe } from './tipo-negocio.pipe';
     NumeroPipe,
     OrdenProductoPipe,
     DatePipe,
-    TipoNegocioPipe
+    TipoNegocioPipe,
+    Nl2brPipe,
+    ComboPipe
   ],
   exports:
   [
@@ -28,7 +32,9 @@ import { TipoNegocioPipe } from './tipo-negocio.pipe';
     NumeroPipe,
     OrdenProductoPipe,
     DatePipe,
-    TipoNegocioPipe
+    TipoNegocioPipe,
+    Nl2brPipe,
+    ComboPipe
   ]
 })
 export class PipesModule { }

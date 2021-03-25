@@ -48,6 +48,10 @@ const routes: Routes = [
   },  {
     path: 'compra-single',
     loadChildren: () => import('./pages/compra-single/compra-single.module').then( m => m.CompraSinglePageModule)
+  },
+  {
+    path: 'combo',
+    loadChildren: () => import('./pages/combo/combo.module').then( m => m.ComboPageModule)
   }
 
 

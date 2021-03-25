@@ -13,9 +13,10 @@ export class PayService {
   constructor( private http:HttpClient,
                private deviceService:DeviceService ) {}
 
-  sendCompra(ubicacion, total, subtotal, propina, tipo, persona, productos, sectordelivery){
+  sendCompra(ubicacion, total, subtotal, propina, tipo, persona, productos, sectordelivery, articulos){
 
     let url = environment.URI + "payrest";
+    
     let data = {
       idEmpresa: environment.IDEMPRESA,
       ubicacion,
@@ -25,6 +26,7 @@ export class PayService {
       tipo,
       persona,
       productos,
+      articulos,
       sectordelivery,
       uuid: this.deviceService.getUUID(),
       model: this.deviceService.getModel()

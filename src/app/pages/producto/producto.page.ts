@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController, ModalController } from '@ionic/angular';
+
 import { ZoomImagenPage  } from '../zoom-imagen/zoom-imagen.page';
+import { ComboPage } from '../combo/combo.page';
 
 import { MenuService } from '../../services/menu.service';
 import { StorageService } from '../../services/storage.service';
@@ -30,6 +32,9 @@ export class ProductoPage implements OnInit {
   colorsegundo:string = '';
   colortercero:string = '';
 
+  esCombo:boolean = false;
+  combo:any = [] ;
+
   constructor( private route: ActivatedRoute,
                private router: Router,
                private menuService:MenuService,
@@ -37,9 +42,14 @@ export class ProductoPage implements OnInit {
                private storageService:StorageService,
                private coloresService:ColoresService,
                private alertController: AlertController,
-               private toastService: ToastService ) {}
+               private toastService: ToastService ) {
+                 
+                this.coloresService.getColorStorage();
+                
+              }
 
   ngOnInit(){
+    this.coloresService.getColorStorage();
     this.getColores();
   }
   ionViewWillEnter(){
@@ -62,10 +72,15 @@ export class ProductoPage implements OnInit {
     .subscribe( (resp:any)  => {
       this.producto = resp.info.producto;
       this.precios = resp.info.precios; 
-      this.existeProducto(this.precios); 
+      this.existeProducto(this.precios);
       this.imagenes = resp.info.imagenes;
       this.pager = this.imagenes.length > 0 ? true : false;
       this.load = !(resp.error);
+
+      this.esCombo = resp.info.esCombo;
+      if( this.esCombo ){
+        this.combo = resp.info.combo;
+      }
     });
   }
 
@@ -98,7 +113,7 @@ export class ProductoPage implements OnInit {
     
     if( value.detail.value ){
       
-      this.storageService.insertStorage(nmbPro, varPro, value.detail.value, '');
+      this.storageService.insertStorage(nmbPro, varPro, value.detail.value, '', this.esCombo, '', false);
       this.disabled = false;
 
     }else{
@@ -117,8 +132,15 @@ export class ProductoPage implements OnInit {
     if ( stock > cantidad ){
       this.stock[varPro.PROVAR_ID] = '';
     }
+    
+    //ELIMINAR ULTIMO PEDIDO DE COMBO
+    if( this.esCombo ){
+      this.storageService.deleteLastCombo(varPro.PROVAR_ID);
+    }
+
     this.cantidad[varPro.PROVAR_ID] = cantidad;
-    this.storageService.insertStorage(nmbPro, varPro, cantidad, '');
+    this.storageService.insertStorage(nmbPro, varPro, cantidad, '', this.esCombo, '', false);
+
     if( cantidad == 0 ){
       var counter = this.storageService.countProductos();
       this.storageService.borrarUltimo( counter - 1 );
@@ -127,7 +149,19 @@ export class ProductoPage implements OnInit {
     }
 
   }
+
   sumar(nmbPro:string, varPro:any, cantidad:number, stock:number){
+
+    //CONFIRMAR SI ES COMBO
+    if( this.esCombo ){
+      this.abrirDatosCombo(this.combo, nmbPro, varPro, cantidad, stock);
+    }else{
+      this.addSuma(nmbPro, varPro, cantidad, stock, this.esCombo, '', false);
+    }
+
+  }
+
+  addSuma(nmbPro:string, varPro:any, cantidad:number, stock:number, esCombo:boolean, articulo:any, esSuma:boolean){
     if ( !cantidad ){
       cantidad = 0 ;
     }
@@ -136,10 +170,30 @@ export class ProductoPage implements OnInit {
       this.stock[varPro.PROVAR_ID] = stock;
     }
     this.cantidad[varPro.PROVAR_ID] = cantidad;
-    this.storageService.insertStorage(nmbPro, varPro, cantidad, '');
+    this.storageService.insertStorage(nmbPro, varPro, cantidad, '', esCombo, articulo, esSuma);
     this.countShop = this.storageService.countProductos();
     this.disabled = false;
   }
+
+  async abrirDatosCombo(combo:any, nmbPro:string, varPro:any, cantidad:number, stock:number){    
+    const modal = await this.modalCtrl.create({
+        component: ComboPage,
+        componentProps: {
+          combo,
+          nmbPro
+        }
+      });
+      modal.onDidDismiss()
+      .then((data) => {
+        if( data.data ){
+          this.addSuma(nmbPro, varPro, cantidad, stock, true, data.data, true);
+        }
+      });
+
+      await modal.present();
+  }
+
+  
 
   irShop(){
     this.router.navigate(['tabs/tab3']);
@@ -167,7 +221,7 @@ export class ProductoPage implements OnInit {
         }, {
           text: 'Agregar',
           handler: (data) => {
-            this.storageService.insertStorage(nmbPro, varPro, cantidad, data.observacion);
+            this.storageService.insertStorage(nmbPro, varPro, cantidad, data.observacion,this.esCombo, '', false);
             this.toastService.presentToast('OBSERVACIÓN AGREGADA');
           }
         }
@@ -179,6 +233,10 @@ export class ProductoPage implements OnInit {
   refresh(ev){
     this.instanciar();
     ev.target.complete();
+  }
+
+  limpiar(){
+    this.storageService.limpiarStorage();
   }
 
 }

@@ -12,7 +12,7 @@ export class StoragePersonaService {
   nmbSetPersona:string = 'persona-' + environment.IDEMPRESA;
 
   constructor( private nativeStorage: NativeStorage,
-               public platform: Platform ) { }
+               private platform: Platform ) { }
 
     insertStorage(nombre:string, fono:string, email:string, direccion:string, ciudad:string){
       this.persona = [];
