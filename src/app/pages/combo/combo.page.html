@@ -1,0 +1,46 @@
+<ion-header [translucent]="true" no-border>
+    <ion-toolbar [color]="colorsegundo">
+
+        <ion-title>OPCIONES</ion-title>
+        <ion-button [color]="colorsegundo" class="noborder" slot=end (click)="salir()">
+            <ion-icon name="close-outline"></ion-icon>
+        </ion-button>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content [color]="colorprimero">
+
+    <div *ngIf=" combo == '' ">
+        <ion-skeleton-text animated style="width: 100%; height: 300px"></ion-skeleton-text>
+    </div>
+
+    <ion-grid>
+        <ion-row>
+            <ion-col size="12" class="ion-text-center">
+                <h3>SELECCIONAR LAS OPCIONES PARA {{ nmbPro }}</h3>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ion-list *ngFor="let grupo of combo; let i = index">
+        <ion-radio-group>
+
+            <ion-list-header [color]="colorsegundo">
+                <h4>{{ grupo.NOMBRE }}: </h4>
+            </ion-list-header>
+
+            <ion-item *ngFor="let articulo of grupo.ARTICULOS" [color]="colorprimero" (click)=" selectArticulo(articulo,i) ">
+                <ion-label>{{ articulo.ARTICULO_NOMBRE }}</ion-label>
+                <ion-radio slot="end" value="{{ articulo.ARTICULO_ID }}"></ion-radio>
+            </ion-item>
+
+        </ion-radio-group>
+    </ion-list>
+
+    <ion-row>
+        <ion-col size="12">
+            <ion-button [color]="colorsegundo " expand="block" (click)="seleccionar()">SELECCIONAR</ion-button>
+        </ion-col>
+    </ion-row>
+
+</ion-content>
